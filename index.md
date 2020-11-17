@@ -1,7 +1,12 @@
 ---
 title: "Programming in R"
 author: Amanda Suzzi
-output: html_notebook
+output:
+  html_document:
+    toc: true
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
 editor_options: 
   chunk_output_type: inline
 ---
