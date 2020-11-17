@@ -12,6 +12,8 @@ editor_options:
   chunk_output_type: inline
 ---
 
+Welcome
+------------
 Dear Students,
 
 Welcome to Programming in R! My name is Amanda Suzzi and I'll be lead
