@@ -28,7 +28,9 @@ classes.
 
 Preparations
 ------------
-
+<details>
+  <summary>Click to expand!</summary>
+  
 My teaching is hands-on, and to follow these lessons, you must have R
 and RStudio installed on their computers. You also need to be able to
 install a number of R packages, create directories, and download files.
@@ -144,3 +146,5 @@ the following code into the console:
     library(tidyverse)
 
 If you do not see an error, you are good to go!
+</details>
+
