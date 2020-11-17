@@ -32,7 +32,7 @@ To avoid troubleshooting during the lessons, You should follow the
 instruction below to download and install (or update) everything
 beforehand.
 
-### Install R and RStudio
+## Install R and RStudio
 
 R and RStudio are two separate pieces of software:
 
@@ -46,7 +46,7 @@ If you don't already have R and RStudio installed, follow the
 instructions for your operating system below. You have to install R
 before you install RStudio.
 
-#### Windows
+### Windows
 
 -   Download R from the [CRAN
     website](https://cran.r-project.org/bin/windows/base/release.htm).
@@ -59,7 +59,7 @@ before you install RStudio.
 -   Once it's installed, open RStudio to make sure it works and you
     don't get any error messages.
 
-##### MacOS
+### MacOS
 
 -   Download R from the [CRAN
     website](https://cran.r-project.org/bin/macosx/).
@@ -75,7 +75,7 @@ before you install RStudio.
 -   Once it's installed, open RStudio to make sure it works and you
     don't get any error messages.
 
-##### Linux
+### Linux
 
 -   Follow the instructions for your distribution from
     [CRAN](https://cloud.r-project.org/bin/linux), they provide
@@ -94,7 +94,7 @@ before you install RStudio.
 -   Once it's installed, open RStudio to make sure it works and you
     don't get any error messages.
 
-### Update R and RStudio
+## Update R and RStudio
 
 If you already have R and RStudio installed, check if your R and RStudio
 are up to date:
@@ -115,7 +115,7 @@ Note: It is not necessary to remove old versions of R from your system,
 but if you wish to do so you can [check
 here.](https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f)
 
-### Install required R package
+## Install required R package
 
 During the course we will need a number of R packages. Packages contain
 useful R code written by other people. We will use the package
@@ -234,7 +234,11 @@ We will use RStudio IDE to write code, navigate the files on our computer,
 inspect the variables we are going to create, and visualize the plots we will
 generate. RStudio can also be used for other things (e.g., version control,
 developing packages, writing Shiny apps) that we will not cover during the
-workshop.
+class.
+
+![RStudio interface screenshot. Clockwise from top left: Source,
+Environment/History, Files/Plots/Packages/Help/Viewer,
+Console.](img/rstudio-screenshot.png)
 
 RStudio is divided into 4 "Panes": the **Source** for your scripts and documents
 (top-left, in the default layout), your **Environment/History** (top-right)
@@ -286,6 +290,9 @@ and it can lead to hard to debug errors by having objects in memory you forgot
 you had. To turn that off, go to Tools --\> 'Global Options' and select the
 'Never' option for 'Save workspace to .RData' on exit.'
 
+![Set 'Save workspace to .RData on exit' to
+'Never'](img/rstudio-preferences.png)
+
 ### Organizing your working directory
 
 Using a consistent folder structure across your projects will help keep things
@@ -311,7 +318,7 @@ create directories (folders) for **scripts**, **data**, and **documents**.
     functions (more on that later).
 -   **Additional (sub)directories** depending on your project needs.
 
-For this workshop, we will need a `data_raw/` folder to store our raw data, and
+For this class, we will need a `data_raw/` folder to store our raw data, and
 we will use `data/` for when we learn how to export data as CSV files, and a
 `fig/` folder for the figures that we will save.
 
@@ -323,6 +330,13 @@ we will use `data/` for when we learn how to export data as CSV files, and a
 
 We are going to keep the script in the root of our working directory because we
 are only going to use one file and it will make things easier.
+
+Your working directory should now look like this:
+
+```{r, results='markup',fig.cap="How it should look like at the beginning of this lesson", echo=FALSE, purl=FALSE, out.width='100%', fig.align='center'}
+knitr::include_graphics("img/r-starting-how-it-should-look-like.png")
+```
+
 
 
 ### The working directory
@@ -406,6 +420,9 @@ commands will open matching help files in RStudio's help panel in the lower
 right corner. You can also use the help panel to search help directly, as seen
 in the screenshot.
 
+![RStudio help panel. When typing a word in the search field, it will show
+related suggestions.](img/rstudiohelp.png)
+
 ### Automatic code completion
 
 When you write code in RStudio, you can use its automatic code completion to
@@ -445,6 +462,9 @@ work. Often, the problem is a small typo in a variable name or a missing
 parenthesis. Watch for the red x's next to your code in Rstudio. These may
 provide helpful hints about the source of the problem.
 
+![RStudio shows a red x next to a line of code that R doesn't understand.
+](img/rstudioredx.png)
+
 If you can't fix an error yourself, start by googling it. Some error messages
 are too generic to diagnose a problem (e.g. "subscript out of bounds"). In that
 case it might help to include the name of the function or package you're using
@@ -454,9 +474,9 @@ in your query.
 
 If your Google search is unsuccessful, you may want to ask other R users for
 help. There are different places where you can ask for help. During this
-workshop, don't hesitate to talk to your neighbor, compare your answers, and ask
+class, don't hesitate to talk to your neighbor, compare your answers, and ask
 for help. You might also be interested in organizing regular meetings following
-the workshop to keep learning from each other. If you have a friend or colleague
+the class to keep learning from each other. If you have a friend or colleague
 with more experience than you, they might also be able and willing to help you.
 
 Besides that, there are a few places on the internet that provide help:
@@ -530,3 +550,240 @@ and make it easy to pinpoint where the issue might be. Try to...
 -   [This blog post by Jon
     Skeet](http://codeblog.jonskeet.uk/2010/08/29/writing-the-perfect-question/)
     has comprehensive advice on how to ask programming questions.
+
+## Assignment 1
+
+Here is your first Weekly Programming Assignment (WPA)! Open a new R script in R and save it as wpa_1_LastFirst (where Last and First is your last and first name). At the top of your script, make sure to put the following info (make sure to put the hashtag at the beginning so R knows that it's a comment, not real R code):
+
+    # Assignment: WPA 1
+    # Name: Whitney Evergreen
+    # Date: 2 Feb 2020
+
+Copy and paste each of the following code chunks into your assignment.
+
+### 1. Install and load the yarrr package
+First we'll install and load the yarrr package. The yarrr package contains many datasets and functions (like `pirateplot` we'll use in this course.)
+
+    ## 1A: # Install and load the yarrr package
+    install.packages('yarrr')
+    library(yarrr)
+    
+### 2. Explore the pirates dataset
+The pirates dataset contains data from a survey of 1,000 pirates.
+    
+    ## 2A: Get help for pirates data
+    ?pirates
+    ## 2B: Print the first few rows of the dataset
+    head(pirates)
+    ## 2C: Show the structure of the dataset
+    str(pirates)
+    ## 2D: Show the entire dataset in a new window
+    View(pirates)
+    
+### 3. Basic descriptive statistics for vectors
+Descriptives for numeric data
+
+    ## 3A: What is the mean age?
+    mean(pirates$age)
+    ## 3B: What was the height of the tallest pirate?
+    max(pirates$height)
+    ## 3C (YOUR TURN!): What was the mean weight of the pirates?
+    
+Descriptives for non-numeric data
+
+    ## 3D: How many pirates are there of each sex?
+    table(pirates$sex)
+    ## 3E (YOUR TURN!): # How many pirates were there of each age?
+
+### 4. Descriptive statistics for non-numeric data
+    
+    ## 4A: What was the mean age for each sex?
+    aggregate(formula = age ~ sex, 
+              data = pirates,
+              FUN = mean)
+    ## 4B (YOUR TURN!): What was the mean beard length for each sex?
+    # (Hint: The beard length column is called beard.length)
+    ## 4C: What is the median age of pirates for each combination of sex and headband?
+    aggregate(formula = age ~ sex + headband, 
+              data = pirates,
+              FUN = median)
+              
+### 5. Histograms
+
+    ## 5A: A default histogram of pirate ages
+    hist(x = pirates$age)
+    ## 5B (YOUR TURN!): A default histogram of pirate tattoos
+    ## 5C: A customized histogram of pirate ages
+    hist(x = pirates$age,
+         main = "Distribution of pirate ages",
+         col = "skyblue",
+         border = "white",
+         xlab = "Age",
+         ylim = c(0, 400))
+    
+    # Add mean label
+    text(x = mean(pirates$age), y = 375, 
+         labels = paste("Mean = ", round(mean(pirates$age), 2)))
+    
+    # Add dashed line at mean
+    segments(x0 = mean(pirates$age), y0 = 0, 
+             x1 = mean(pirates$age), y1 = 360, 
+             col = gray(.2, .2), 
+             lty = 2)
+    ## 5D: Overlapping histograms of pirate ages for females and males
+
+    # Start with the female data
+    hist(x = pirates$age[pirates$sex == "female"],
+         main = "Distribution of pirate ages by sex",
+         col = transparent("red", .2),
+         border = "white",
+         xlab = "Age", 
+         breaks = seq(0, 50, 2),
+         probability = T,
+         ylab = "", 
+         yaxt = "n")
+    
+    # Add male data
+    hist(x = pirates$age[pirates$sex == "male"],
+         add = T, 
+         probability = T, 
+         border = "white",
+     breaks = seq(0, 50, 2),
+     col = transparent("skyblue", .5))
+
+    # Add the legend
+    legend(x = 40, 
+           y = .05,
+           col = c("red", "skyblue"),
+           legend = c("Female", "Male"),
+           pch = 16,
+           bty = "n")
+           
+### 6. Scatterplots
+   
+    ## 6A: A simple scatterplot of pirate height and weight
+    plot(x = pirates$height,
+         y = pirates$weight,
+         xlab = "Height (cm)",
+         ylab = "Weight (kg)")
+    ## 6B: A fancier scatterplot of the same data with some additional arguments
+    
+    # Create main plot
+    plot(x = pirates$height, 
+         y = pirates$weight,
+         main = 'My first scatterplot of pirate data!',
+         xlab = 'Height (in cm)',
+         ylab = 'Weight (in kg)',
+         pch = 16,    # Filled circles
+         col = gray(0, .1)) # Transparent gray
+         
+    # Add gridlines
+    grid()
+    
+    # Create a linear regression model
+    model <- lm(formula = weight ~ height, 
+                data = pirates)
+    
+    # Add regression to plot
+    abline(model,
+           col = 'blue', lty = 2)
+
+### 7. Color palettes
+    
+    ## 7A: Look at all the palettes from piratepal()
+    piratepal()
+    ## 7B: Look at the basel palette in detail
+    piratepal(palette = "basel", plot.result = TRUE)
+    ## 7C (YOUR TURN!): Look at the "pony" palette in detail
+    ## 7D: Scatterplot of pirate height and weight using the pony palette
+    my.cols <- piratepal(palette = "pony", 
+                         trans = .2, 
+                         length.out = nrow(pirates))
+    
+    # Create the plot
+    plot(x = pirates$height, y = pirates$weight,
+         main = "Random scatterplot with My Little Pony Colors",
+         xlab = "Pony height",
+         ylab = "Pony weight",
+         pch = 21,  # Round symbols with borders
+         col = "white",  # White border
+         bg = my.cols,  # Random colors
+         bty = "n"  # No plot border
+         )
+    
+    # Add gridlines
+    grid()
+    
+### 8. Barplots
+
+    ## 8A: Barpot of mean height by favorite.pirate
+
+    # Calculate mean height for each favorite.pirate
+    pirate.heights <- aggregate(height ~ favorite.pirate,
+                         data = pirates,
+                         FUN = mean)
+    
+    barplot(pirate.heights$height, 
+            main = "Barplot of mean height by favorite pirate",
+            names.arg = pirate.heights$favorite.pirate)
+    ## 8B: Same as 8A, but with customizations
+    barplot(pirate.heights$height, 
+            ylim = c(0, 200),
+            ylab = "Pirate Height (in cm)",
+            main = "Barplot of mean height by favorite pirate",
+            names.arg = pirate.heights$favorite.pirate, 
+            col = piratepal("basel", trans = .2))
+    
+    abline(h = seq(0, 200, 25), lty = 3, lwd = c(1, .5))
+
+### 9. pirateplots
+
+    ## 9A: Pirateplot of height by favorite pirate
+    pirateplot(formula = height ~ favorite.pirate,
+               data = pirates,
+               main = "Pirateplot of height by favorite pirate")
+    ## 9B: Pirateplot of height by sex and eyepatch
+    pirateplot(formula = height ~ sex + eyepatch,
+               data = pirates,
+               main = "Pirateplot of height by favorite pirate")
+               
+### 10. Two sample hypothesis tests
+t-test
+    
+    ## 10A: Do pirates with eyepatches have longer beards than those without eyepatches?
+    t.test(formula = beard.length ~ eyepatch, 
+           data = pirates,
+           alternative = 'two.sided')
+       
+correlation test
+
+    ## 10B: Is there a correlation between a pirate's age and the number of parrots (s)he has?
+    cor.test(formula = ~ age + parrots,
+             data = pirates)
+    # 10C (YOUR TURN!): Is there a correlation between weight and tattoos?
+    
+### 11. ANOVA
+
+    ## 11A: ANOVA on beard.length as a function of sex and college
+    
+    # Run the ANOVA
+    beard.aov <- aov(formula = beard.length ~ sex + college, 
+                       data = pirates)
+    
+    # Print summary results
+    summary(beard.aov)
+    ## 11B: Post-hoc tests on the previous ANOVA
+    TukeyHSD(beard.aov)
+    
+### 12. Regression
+
+    ## 12A: regression analysis showing if age, weight, and tattoos predict how many treasure chests a pirate has found
+    
+    # Run the regression
+    chests.lm <- lm(formula = tchests ~ age + weight + tattoos, 
+                    data = pirates)
+    
+    # Print summary results
+    summary(chests.lm)
+    
+That's it! Now it's time to submit your assignment! Save and email your wpa1LastFirst.R file to me. 
