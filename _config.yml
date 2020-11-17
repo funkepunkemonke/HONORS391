@@ -1,4 +1,12 @@
 theme: jekyll-theme-slate
+locale: en_US
 title: HONORS391 Programming in R
 description: This is an introduction to R designed for participants with no programming experience.
 baseurl: /HONORS391
+
+owner:
+  name: Amanda Suzzi
+  email: asuzzi@umass.edu
+  github: funkepunkemonke
+  twitter: funkepunkemonke
+  researchgate: funkepunkemonke
