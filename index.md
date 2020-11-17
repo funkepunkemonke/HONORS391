@@ -4,7 +4,7 @@ author: Amanda Suzzi
 output:
   html_document:
     keep_md: true
-
+layout: default
 editor_options: 
   chunk_output_type: inline
 ---
