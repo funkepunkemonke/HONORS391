@@ -3,8 +3,6 @@ title: "Programming in R"
 author: Amanda Suzzi
 output:
   html_document: true
-editor_options: 
-  chunk_output_type: inline
 ---
 
 Welcome
