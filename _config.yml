@@ -1,1 +1,4 @@
 theme: jekyll-theme-slate
+title: HONORS391: Programming in R
+description: This is an introduction to R designed for participants with no programming experience.
+baseurl: /HONORS391
