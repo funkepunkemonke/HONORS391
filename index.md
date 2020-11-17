@@ -2,19 +2,14 @@
 title: "Programming in R"
 author: Amanda Suzzi
 output:
-  html_document:
-    keep_md: true
-    toc: true
-    toc_float: 
-      collapsed: false
-      smooth_scroll: false
+   rmdformats::material
 layout: default
 editor_options: 
   chunk_output_type: inline
 ---
 
-Welcome
-------------
+# Welcome
+
 Dear Students,
 
 Welcome to Programming in R! My name is Amanda Suzzi and I'll be lead
@@ -27,11 +22,8 @@ Hands-on computer exercises based on a wide range of materials are
 utilized to provide a solid foundation for further R programming
 classes.
 
-Preparations
-------------
-<details>
-  <summary>Click to expand!</summary>
-  
+# Preparations
+
 My teaching is hands-on, and to follow these lessons, you must have R
 and RStudio installed on their computers. You also need to be able to
 install a number of R packages, create directories, and download files.
@@ -147,29 +139,11 @@ the following code into the console:
     library(tidyverse)
 
 If you do not see an error, you are good to go!
-</details>
 
-Lesson 1: Background and Getting Started
-------------
-<details>
-  <summary>Click to expand!</summary>
 
---------------------------------------------------------------------------------
 
-> ### Learning Objectives
->
-> -   Be able to explain what R and RStudio are, what they are used for, and how
->     they relate to each other.
-> -   Describe the purpose of the RStudio Script, Console, Environment, and
->     Plots panes.
-> -   Organize files and directories for a set of analyses as an R Project, and
->     understand the purpose of the working directory.
-> -   Use the built-in RStudio help interface to search for more information on
->     R functions.
-> -   Demonstrate how to provide sufficient information for troubleshooting with
->     the R user community.
+# Lesson 1: Background and Getting Started
 
---------------------------------------------------------------------------------
 ## What is R? What is RStudio?
 
 The term "`R`" is used to refer to both the programming language and the
@@ -262,10 +236,6 @@ generate. RStudio can also be used for other things (e.g., version control,
 developing packages, writing Shiny apps) that we will not cover during the
 workshop.
 
-![RStudio interface screenshot. Clockwise from top left: Source,
-Environment/History, Files/Plots/Packages/Help/Viewer,
-Console.](img/rstudio-screenshot.png)
-
 RStudio is divided into 4 "Panes": the **Source** for your scripts and documents
 (top-left, in the default layout), your **Environment/History** (top-right)
 which shows all the objects in your working space (Environment) and your command
@@ -315,9 +285,6 @@ automatically loaded, when you reopen your project. Saving a workspace to
 and it can lead to hard to debug errors by having objects in memory you forgot
 you had. To turn that off, go to Tools --\> 'Global Options' and select the
 'Never' option for 'Save workspace to .RData' on exit.'
-
-![Set 'Save workspace to .RData on exit' to
-'Never'](img/rstudio-preferences.png)
 
 ### Organizing your working directory
 
@@ -438,9 +405,6 @@ name, you can use the double question mark `??`, for example `??kruskall`. Both
 commands will open matching help files in RStudio's help panel in the lower
 right corner. You can also use the help panel to search help directly, as seen
 in the screenshot.
-
-![RStudio help panel. When typing a word in the search field, it will show
-related suggestions.](img/rstudiohelp.png)
 
 ### Automatic code completion
 
@@ -566,4 +530,3 @@ and make it easy to pinpoint where the issue might be. Try to...
 -   [This blog post by Jon
     Skeet](http://codeblog.jonskeet.uk/2010/08/29/writing-the-perfect-question/)
     has comprehensive advice on how to ask programming questions.
-</details>
