@@ -3,6 +3,7 @@ title: "Programming in R"
 author: Amanda Suzzi
 output:
   html_document:
+    keep_md: true
     toc: true
     toc_float: 
       collapsed: false
