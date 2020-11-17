@@ -2,7 +2,7 @@
 title: "Programming in R"
 author: Amanda Suzzi
 output:
-   rmdformats::material
+   rmdformats::readthedown
 layout: default
 editor_options: 
   chunk_output_type: inline
