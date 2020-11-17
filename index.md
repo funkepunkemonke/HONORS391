@@ -300,12 +300,12 @@ below.
     `New Project`.
 3.  Enter a name for this new folder (or "directory"), and choose a convenient
     location for it. This will be your **working directory** for the rest of the
-    day (e.g., `~/data-carpentry`).
+    day (e.g., `~/HONORS391/`).
 4.  Click on `Create Project`.
 5.  Download the [code
-    handout](https://datacarpentry.org/R-ecology-lesson/code-handout.R), place
+    handout](TBD), place
     it in your working directory and rename it (e.g.,
-    `data-carpentry-script.R`).
+    `script.R`).
 6.  (Optional) Set Preferences to 'Never' save workspace in RStudio.
 
 A workspace is your current working environment in R which includes any
@@ -350,18 +350,13 @@ we will use `data/` for when we learn how to export data as CSV files, and a
 
 -   Under the `Files` tab on the right of the screen, click on `New Folder` and
     create a folder named `data_raw` within your newly created working directory
-    (e.g., `~/data-carpentry/`). (Alternatively, type `dir.create("data_raw")`
+    (e.g., `~/HONORS391/`). (Alternatively, type `dir.create("data_raw")`
     at your R console.) Repeat these operations to create a `data` and a `fig`
     folder.
 
 We are going to keep the script in the root of our working directory because we
 are only going to use one file and it will make things easier.
 
-Your working directory should now look like this:
-
-```{r, results='markup',fig.cap="How it should look like at the beginning of this lesson", echo=FALSE, purl=FALSE, out.width='100%', fig.align='center'}
-knitr::include_graphics("img/r-starting-how-it-should-look-like.png")
-```
 
 ### The working directory
 
@@ -486,9 +481,6 @@ work. Often, the problem is a small typo in a variable name or a missing
 parenthesis. Watch for the red x's next to your code in Rstudio. These may
 provide helpful hints about the source of the problem.
 
-![RStudio shows a red x next to a line of code that R doesn't understand.
-](img/rstudioredx.png)
-
 If you can't fix an error yourself, start by googling it. Some error messages
 are too generic to diagnose a problem (e.g. "subscript out of bounds"). In that
 case it might help to include the name of the function or package you're using
@@ -546,38 +538,7 @@ and make it easy to pinpoint where the issue might be. Try to...
 
 -   Include the output of `sessionInfo()` in your question. It provides
     information about your platform, the versions of R and the packages that you
-    are using. As an example, here you can see the versions of R and all the
-    packages that we are using to run the code in this lesson:
-
-```{r echo=FALSE, message = FALSE}
-# temporarily load RSQLite so that the version shows in sessionInfo()
-library(RSQLite)
-```
-
-```{r, results='show', purl=FALSE}
-sessionInfo()
-```
-
-```{r echo=FALSE, message = FALSE}
-detach(package:RSQLite, unload=TRUE)
-```
-
-## How to learn more after the workshop?
-
-The material we cover during this workshop will give you a taste of how you can
-use R to analyze data for your own research. However, to do advanced operations
-such as cleaning your dataset, using statistical methods, or creating beautiful
-graphics you will need to learn more.
-
-The best way to become proficient and efficient at R, as with any other tool, is
-to use it to address your actual research questions. As a beginner, it can feel
-daunting to have to write a script from scratch, and given that many people make
-their code available online, modifying existing code to suit your purpose might
-make it easier for you to get started.
-
-```{r kitten-img, results='markup', echo=FALSE, purl=FALSE, out.width='400px', fig.align='center'}
-knitr::include_graphics("img/kitten-try-things.jpg")
-```
+    are using. 
 
 ## More resources
 
