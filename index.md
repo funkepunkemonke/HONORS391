@@ -24,8 +24,12 @@ Hands-on computer exercises based on a wide range of materials are
 utilized to provide a solid foundation for further R programming
 classes.
 
+
+
 Preparations
 ------------
+<details>
+  <summary>Click to expand!</summary>
 
 My teaching is hands-on, and to follow these lessons, you must have R
 and RStudio installed on their computers. You also need to be able to
@@ -142,3 +146,13 @@ the following code into the console:
     library(tidyverse)
 
 If you do not see an error, you are good to go!
+</details>
+
+Lesson 1
+------------
+<details>
+  <summary>Click to expand!</summary>
+
+TBD
+
+</details>
