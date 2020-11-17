@@ -1528,6 +1528,12 @@ div.tocify {
   border-radius: 0px;
 }
 
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
 
 </style>
 
@@ -1568,6 +1574,8 @@ div.tocify {
 <p>Hands-on computer exercises based on a wide range of materials are utilized to provide a solid foundation for further R programming classes.</p>
 <div id="preparations" class="section level2">
 <h2>Preparations</h2>
+<details>
+<p><summary>Click to expand!</summary></p>
 <p>My teaching is hands-on, and to follow these lessons, you must have R and RStudio installed on their computers. You also need to be able to install a number of R packages, create directories, and download files.</p>
 <p>To avoid troubleshooting during the lessons, You should follow the instruction below to download and install (or update) everything beforehand.</p>
 <div id="install-r-and-rstudio" class="section level3">
@@ -1625,12 +1633,20 @@ div.tocify {
 <h3>Install required R package</h3>
 <p>During the course we will need a number of R packages. Packages contain useful R code written by other people. We will use the package <code>tidyverse</code>.</p>
 <p>To try to install this package, open RStudio and copy and paste the following command into the console window (look for a blinking cursor on the bottom left), then press the Enter (Windows and Linux) or Return (MacOS) to execute the command.</p>
-<pre><code>install.package(&quot;tidyverse&quot;)</code></pre>
+<p>install.package(“tidyverse”)</p>
 <p>Alternatively, you can install the packages using RStudio’s graphical user interface by going to <code>Tools &gt; Install Packages</code> and typing the names of the packages separated by a comma.</p>
 <p>R tries to download and install the packages on your machine. When the installation has finished, you can try to load the packages by pasting the following code into the console:</p>
-<pre><code>library(tidyverse)</code></pre>
-<p>If you do not see an error, you are good to go!</p>
+<p>library(tidyverse)</p>
+If you do not see an error, you are good to go!
+</details>
 </div>
+</div>
+<div id="lesson-1" class="section level2">
+<h2>Lesson 1</h2>
+<details>
+<p><summary>Click to expand!</summary></p>
+<p>TBD</p>
+</details>
 </div>
 
 
@@ -1688,8 +1704,8 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = true;
-    options.smoothScroll = true;
+    options.showAndHide = false;
+    options.smoothScroll = false;
 
     // tocify
     var toc = $("#TOC").tocify(options).data("toc-tocify");
