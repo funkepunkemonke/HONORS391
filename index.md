@@ -593,7 +593,7 @@ Descriptives for non-numeric data
 
     ## 3D: How many pirates are there of each sex?
     table(pirates$sex)
-    ## 3E (YOUR TURN!): # How many pirates were there of each age?
+    ## 3E (YOUR TURN!): # How many pirates use each sword type? (Hint:pirates$sword.type)
 
 ### 4. Descriptive statistics for non-numeric data
     
