@@ -276,11 +276,7 @@ below.
     location for it. This will be your **working directory** for the rest of the
     day (e.g., `~/HONORS391/`).
 4.  Click on `Create Project`.
-5.  Download the [code
-    handout](TBD), place
-    it in your working directory and rename it (e.g.,
-    `script.R`).
-6.  (Optional) Set Preferences to 'Never' save workspace in RStudio.
+5.  (Optional) Set Preferences to 'Never' save workspace in RStudio.
 
 A workspace is your current working environment in R which includes any
 user-defined object. By default, all of these objects will be saved, and
@@ -787,3 +783,451 @@ correlation test
     summary(chests.lm)
     
 That's it! Now it's time to submit your assignment! Save and email your wpa1LastFirst.R file to me. 
+
+# Lesson 2: Objects, Functions, and Vectors
+
+I'm assuming that you have installed R and Rstudio by now. If you have had any problems, please start an issue on the Github page or, if we haven't gotten there yet, send me an email.
+
+## Creating objects in R
+
+You can get output from R simply by typing math in the console:
+
+    3 + 5
+    12 / 7
+
+However, to do useful and interesting things, we need to assign _values_ to
+_objects_. To create an object, we need to give it a name followed by the
+assignment operator `<-`, and the value we want to give it:
+    
+    weight_kg <- 55
+
+`<-` is the assignment operator. It assigns values on the right to objects on
+the left. So, after executing `x <- 3`, the value of `x` is `3`. The arrow also looks like a mouth (with tongue), which makes it easy to pronounce as `x` **eats** 3.  For historical reasons, you can also use `=` for assignments, but not in every context. Because of the
+[slight](https://blog.revolutionanalytics.com/2008/12/use-equals-or-arrow-for-assignment.html)
+[differences](https://r.789695.n4.nabble.com/Is-there-any-difference-between-and-tp878594p878598.html)
+in syntax, it is good practice to always use `<-` for assignments.
+
+In RStudio, typing <kbd>Alt</kbd> + <kbd>-</kbd> (push <kbd>Alt</kbd> at the
+same time as the <kbd>-</kbd> key) will write ` <- ` in a single keystroke in a PC, while typing <kbd>Option</kbd> + <kbd>-</kbd> (push <kbd>Option</kbd> at the
+same time as the <kbd>-</kbd> key) does the same in a Mac.
+
+Objects can be given almost any name such as `x`, `current_temperature`, or `subject_id`. Here are some further guidelines on naming objects:
+
+* You want your object names to be explicit and not too long.
+* They cannot start with a number (`2x` is not valid, but `x2` is).
+* R is case sensitive, so for example, `weight_kg` is different from `Weight_kg`.
+* There are some names that cannot be used because they are the names of fundamental functions in R (e.g., `if`, `else`, `for`, see
+[here](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html)
+for a complete list). In general, even if it's allowed, it's best to not use
+other function names (e.g., `c`, `T`, `mean`, `data`, `df`, `weights`). If in
+doubt, check the help to see if the name is already in use. 
+* It's best to avoid dots (`.`) within names. Many function names in R itself have them and dots also have a special meaning (methods) in R and other programming languages. To avoid confusion, don't include dots in names.
+* It is recommended to use nouns for object names and verbs for function names.
+* Be consistent in the styling of your code, such as where you put spaces, how you name objects, etc. Using a consistent coding style makes your code clearer to read for your future self and your collaborators. In R, three popular style guides come from [Google](https://google.github.io/styleguide/Rguide.xml), [Jean
+Fan](https://jef.works/R-style-guide/) and the
+[tidyverse](https://style.tidyverse.org/). The tidyverse style is very comprehensive and may seem overwhelming at first. You can install the [**`lintr`**](https://github.com/jimhester/lintr) package to automatically check for issues in the styling of your code.
+
+> ### Objects vs. variables
+>
+> What are known as `objects` in `R` are known as `variables` in many other
+> programming languages. Depending on the context, `object` and `variable` can
+> have drastically different meanings. However, in this lesson, the two words
+> are used synonymously. For more information see:
+> https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects
+
+
+When assigning a value to an object, R does not print anything. You can force R to print the value by using parentheses or by typing the object name:
+
+
+    weight_kg <- 55    # doesn't print anything
+    (weight_kg <- 55)  # but putting parenthesis around the call prints the value of `weight_kg`
+    weight_kg          # and so does typing the name of the object
+
+
+Now that R has `weight_kg` in memory, we can do arithmetic with it. For
+instance, we may want to convert this weight into pounds (weight in pounds is 2.2 times the weight in kg):
+
+    2.2 * weight_kg
+
+
+We can also change an object's value by assigning it a new one:
+
+    weight_kg <- 57.5
+    2.2 * weight_kg
+
+
+This means that assigning a value to one object does not change the values of
+other objects  For example, let's store the animal's weight in pounds in a new
+object, `weight_lb`:
+
+    weight_lb <- 2.2 * weight_kg
+
+and then change `weight_kg` to 100.
+
+    weight_kg <- 100
+
+What do you think is the current content of the object `weight_lb`? 126.5 or 220?
+
+### Saving your code
+
+Up to now, your code has been in the console. This is useful for quick queries
+but not so helpful if you want to revisit your work for any reason.
+A script can be opened by pressing <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + 
+<kbd>N</kbd>. 
+It it wise to save your script file immediately. To do this press 
+<kbd>Ctrl</kbd> + <kbd>S</kbd>. This will open a dialogue box where you 
+can decide where to save your script file, and what to name it.
+The `.R` file extension is added automatically and ensures your file
+will open with RStudio.
+
+Don't forget to save your work periodically by pressing <kbd>Ctrl</kbd> + 
+<kbd>S</kbd>.
+
+
+### Comments
+
+The comment character in R is `#`, anything to the right of a `#` in a script
+will be ignored by R. It is useful to leave notes and explanations in your
+scripts.
+RStudio makes it easy to comment or uncomment a paragraph: after selecting the
+lines you  want to comment, press at the same time on your keyboard
+<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>. If you only want to comment
+out one line, you can put the cursor at any location of that line (i.e. no need 
+to select the whole line), then press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + 
+<kbd>C</kbd>.
+
+### Functions and their arguments
+
+Functions are "canned scripts" that automate more complicated sets of commands
+including operations assignments, etc. Many functions are predefined, or can be
+made available by importing R *packages* (more on that later). A function
+usually takes one or more inputs called *arguments*. Functions often (but not
+always) return a *value*. A typical example would be the function `sqrt()`. The
+input (the argument) must be a number, and the return value (in fact, the
+output) is the square root of that number. Executing a function ('running it')
+is called *calling* the function. An example of a function call is:
+
+    weight_kg <- sqrt(10)
+
+
+Here, the value of 10 is given to the `sqrt()` function, the `sqrt()` function
+calculates the square root, and returns the value which is then assigned to
+the object `weight_kg`. This function is very simple, because it takes just one argument.
+
+The return 'value' of a function need not be numerical (like that of `sqrt()`),
+and it also does not need to be a single item: it can be a set of things, or
+even a dataset. We'll see that when we read data files into R.
+
+Arguments can be anything, not only numbers or filenames, but also other
+objects. Exactly what each argument means differs per function, and must be
+looked up in the documentation (see below). Some functions take arguments which
+may either be specified by the user, or, if left out, take on a *default* value:
+these are called *options*. Options are typically used to alter the way the
+function operates, such as whether it ignores 'bad values', or what symbol to
+use in a plot.  However, if you want something specific, you can specify a value
+of your choice which will be used instead of the default.
+
+Let's try a function that can take multiple arguments: `round()`.
+
+    round(3.14159)
+
+
+Here, we've called `round()` with just one argument, `3.14159`, and it has
+returned the value `3`.  That's because the default is to round to the nearest
+whole number. If we want more digits we can see how to do that by getting
+information about the `round` function.  We can use `args(round)` to find what 
+arguments it takes, or look at the
+help for this function using `?round`.
+
+    args(round)
+    ?round
+
+
+We see that if we want a different number of digits, we can type `digits = 2` or however many we want.
+
+    round(3.14159, digits = 2)
+
+
+If you provide the arguments in the exact same order as they are defined you
+don't have to name them:
+
+    round(3.14159, 2)
+
+
+And if you do name the arguments, you can switch their order:
+
+    round(digits = 2, x = 3.14159)
+
+
+It's good practice to put the non-optional arguments (like the number you're
+rounding) first in your function call, and to then specify the names of all optional
+arguments.  If you don't, someone reading your code might have to look up the
+definition of a function with unfamiliar arguments to understand what you're
+doing.
+
+
+## Vectors and data types
+
+A vector is the most common and basic data type in R, and is pretty much
+the workhorse of R. A vector is composed by a series of values, which can be
+either numbers or characters. We can assign a series of values to a vector using
+the `c()` function. For example we can create a vector of animal weights and assign
+it to a new object `weight_g`:
+
+    weight_g <- c(50, 60, 65, 82)
+    weight_g
+
+
+A vector can also contain characters:
+
+    animals <- c("mouse", "rat", "dog")
+    animals
+
+
+The quotes around "mouse", "rat", etc. are essential here. Without the quotes R
+will assume objects have been created called `mouse`, `rat` and `dog`. As these objects
+don't exist in R's memory, there will be an error message.
+
+There are many functions that allow you to inspect the content of a
+vector. `length()` tells you how many elements are in a particular vector:
+  
+    length(weight_g)
+    length(animals)
+
+An important feature of a vector, is that all of the elements are the same type of data.
+The function `class()` indicates what kind of object you are working with:
+    
+    class(weight_g)
+    class(animals)
+
+The function `str()` provides an overview of the structure of an object and its
+elements. It is a useful function when working with large and complex
+objects:
+    
+    str(weight_g)
+    str(animals)
+
+
+You can use the `c()` function to add other elements to your vector:
+
+    weight_g <- c(weight_g, 90) # add to the end of the vector
+    weight_g <- c(30, weight_g) # add to the beginning of the vector
+    weight_g
+
+
+In the first line, we take the original vector `weight_g`,
+add the value `90` to the end of it, and save the result back into
+`weight_g`. Then we add the value `30` to the beginning, again saving the result
+back into `weight_g`.
+
+We can do this over and over again to grow a vector, or assemble a dataset.
+As we program, this may be useful to add results that we are collecting or
+calculating.
+
+An **atomic vector** is the simplest R **data type** and is a linear vector of a single type. Above, we saw 
+2 of the 6 main **atomic vector** types  that R
+uses: `"character"` and `"numeric"` (or `"double"`). These are the basic building blocks that
+all R objects are built from. The other 4 **atomic vector** types are:
+
+* `"logical"` for `TRUE` and `FALSE` (the boolean data type)
+* `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's an integer)
+* `"complex"` to represent complex numbers with real and imaginary parts (e.g.,
+  `1 + 4i`) and that's all we're going to say about them
+* `"raw"` for bitstreams that we won't discuss further
+
+You can check the type of your vector using the `typeof()` function and inputting your vector as the argument.
+
+Vectors are one of the many **data structures** that R uses. Other important
+ones are lists (`list`), matrices (`matrix`), data frames (`data.frame`),
+factors (`factor`) and arrays (`array`).
+
+
+## Subsetting vectors
+
+If we want to extract one or several values from a vector, we must provide one
+or several indices in square brackets. For instance:
+
+    animals <- c("mouse", "rat", "dog", "cat")
+    animals[2]
+    animals[c(3, 2)]
+
+
+We can also repeat the indices to create an object with more elements than the
+original one:
+
+    more_animals <- animals[c(1, 2, 3, 2, 1, 4)]
+    more_animals
+
+
+R indices start at 1. Programming languages like Fortran, MATLAB, Julia, and R start
+counting at 1, because that's what human beings typically do. Languages in the C
+family (including C++, Java, Perl, and Python) count from 0 because that's
+simpler for computers to do.
+
+### Conditional subsetting
+
+Another common way of subsetting is by using a logical vector. `TRUE` will
+select the element with the same index, while `FALSE` will not:
+  
+    weight_g <- c(21, 34, 39, 54, 55)
+    weight_g[c(TRUE, FALSE, FALSE, TRUE, TRUE)]
+
+
+Typically, these logical vectors are not typed by hand, but are the output of
+other functions or logical tests. For instance, if you wanted to select only the
+values above 50:
+
+    weight_g > 50    # will return logicals with TRUE for the indices that meet the condition
+    ## so we can use this to select only the values above 50
+    weight_g[weight_g > 50]
+
+
+You can combine multiple tests using `&` (both conditions are true, AND) or `|`
+(at least one of the conditions is true, OR):
+
+    weight_g[weight_g > 30 & weight_g < 50]
+    weight_g[weight_g <= 30 | weight_g == 55]
+    weight_g[weight_g >= 30 & weight_g == 21]
+
+
+Here, `>` for "greater than", `<` stands for "less than", `<=` for "less than
+or equal to", and `==` for "equal to". The double equal sign `==` is a test for
+numerical equality between the left and right hand sides, and should not be
+confused with the single `=` sign, which performs variable assignment (similar
+to `<-`).
+
+A common task is to search for certain strings in a vector.  One could use the
+"or" operator `|` to test for equality to multiple values, but this can quickly
+become tedious. The function `%in%` allows you to test if any of the elements of
+a search vector are found:
+
+    animals <- c("mouse", "rat", "dog", "cat", "cat")
+
+    # return both rat and cat
+    animals[animals == "cat" | animals == "rat"] 
+    
+    # return a logical vector that is TRUE for the elements within animals that are found in the character vector and FALSE for those that are not
+    animals %in% c("rat", "cat", "dog", "duck", "goat") 
+    
+    # use the logical vector created by %in% to return elements from animals that are found in the character vector
+    animals[animals %in% c("rat", "cat", "dog", "duck", "goat")]
+    
+## Assignment 2
+Here is your second Weekly Programming Assignment (WPA)! Open a new R script in R and save it as wpa_2_LastFirst (where Last and First is your last and first name). At the top of your script, make sure to put your header (name, date, etc).
+
+### Examples
+    # Vector of specific values
+    
+    c(37, 45, 23, 54, 66)   # Numeric
+    c("A", "B", "C", "D")   # Character
+    
+    # Vector of integers 1 to 5
+    
+    c(1, 2, 3, 4, 5)                       # using c()
+    1:5                                    # using a:b
+    seq(from = 1, to = 5, by = 1)          # using seq()
+    seq(from = 1, to = 5, length.out = 5)  # same as above using length.out
+    
+    # Vector of multiples of 10 from 10 to 50
+    
+    c(10, 20, 30, 40, 50)
+    seq(from = 10, to = 50, by = 10)
+    seq(from = 10, to = 50, length.out = 5)
+    
+    # Assign vectors to objects
+    
+    data_A <- c(37, 45, 23, 54, 66)
+    data_B <- seq(from = 1, to = 100, by = 2)
+    
+    # Calculate descriptive statistics
+    
+    mean(c(37, 45, 23, 54, 66))
+    mean(data_A)
+    
+    median(seq(from = 1, to = 100, by = 2))
+    median(data_B)
+    
+    # Vector arithmetic
+    
+    a <- c(1, 2, 3, 4, 5)
+    a * 10   # Multiply all elements by 10
+    a + .5   # Add .5 to all elements
+    
+    b <- c(10, 20, 30, 40, 50)
+    a + b    # Add a and b element-wise
+    
+    
+### Does drinking non-alcoholic beer affect cognitive performance?
+
+A psychologist has a theory that some of the negative cognitive effects of alcohol are the result of psychological rather than physiological processes. To test this, she has 12 participants perform a cognitive test before and after drinking non-alcoholic beer which was labeled to contain 5\% alcohol. Results from the study, including some demographic data, are presented in the following table. Note that higher scores on the test indicate better performance.
+
+id | before  | after | age | sex | eye_color
+----| ------ | ------- | ---- | ---- | ----
+1 | 45 | 43 | 20 | male | blue
+2 | 49 | 50 | 19 | female | blue
+3 | 40 | 61 | 22 | male | brown
+4 | 48 | 44 | 20 | female | brown
+5 | 44 | 45 | 27 | male | blue
+6 | 70 | 20 | 22 | female | blue
+7 | 90 | 85 | 22 | male | brown
+8 | 75 | 65 | 20 | female | brown
+9 | 80 | 72 | 25 | male | blue
+10| 65 | 65 | 22 | female | blue
+11 | 80 | 70 | 24 | male | brown
+12 | 52 | 75 | 22 | female | brown
+
+
+### Creating vectors from scratch
+We'll start by creating vector objects representing each vector of data (i.e.; column from the table above) from the study.
+
+1. Create a vector of the id data called `id` using the `c()` function.
+
+2. Now, create the `id` vector again, but this time use the `a:b` function.
+
+3. Now create the `id` vector again! But this time use the `seq()` function. To get help on this function, look at the help menu with `?seq`
+
+4. Create a vector of the before drink data called `before` using `c()`.
+
+5. Create a vector of the after drink data called `after` using `c()`.
+
+6. Create a vector of the age data called `age` using `c()`.
+
+7. Create a vector of the sex data called `sex` but don't use just the `c()` function (that would be a lot of typing...). Instead, just repeat the vector `c("male", "female")` several times using the `rep()` function.
+
+8. Create a vector of the eye color data called `eye_color` using the `rep()` function.
+
+## Combining and changing vectors
+
+9. Create a new vector called `age_months` that shows the participants' age in months instead of years. (Hint: Just multiply each age value by 12)
+
+10. Oops! It turns out that the watch used to measure time was off. All the before times are 1 second too fast, and all the after times are 1 second too slow. Correct these values by using simple arithmetic and then (re)assigning the objects with `<-`!
+
+11. Create a new vector called `change` that shows the change in participants' scores from before to after (Hint: Just subtract one vector from the other)
+
+12. Create a new vector called `average` that shows the participants' *average* score across both tests. That is, the first element of `average` should be the average of the first participant's two scores, and the second element should be the average of the second participant's two scores...(Hint: Don't use the `mean()` function! Instead, use basic arithmetic with `+` and `/`. That is, the elements of `average` should be `before` plus `after` divided by 2.)
+
+
+## Applying functions to vectors
+
+13. How many elements are in *each* of the original data vectors? (Hint: use `length()`). If the number of elements in each is not the same, you typed something in wrong!
+
+14. What was the standard deviation of ages? Assign the result to a scaler object called `age_sd`.
+
+15. What is the median age? Assign the result to a scaler object called `age_median`.
+
+16. How many people were there of each sex? (Hint: use `table()`)
+
+17. What percent of people had each sex? (Hint: use `table()` then divide by its sum with `sum()`)
+
+18. Calculate the mean of the `sex` column. What happens and why?
+
+19. What was the mean `before` time? Assign the result to a scaler object called `before_mean`.
+
+20. What was the mean `after` time? Assign the result to a scaler object called `after_mean`.
+
+21. What was the difference in the mean `before` times and the mean `after` times? Calculate this in two ways: once using the `change` vector, and once using the `before_mean` and `after_mean` objects. You should get the same answer for both!
+
+
+## Submit!
+
+That's it! Now it's time to submit your assignment! Save and email your wpa2LastFirst.R file to me. 

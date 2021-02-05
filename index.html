@@ -1586,6 +1586,15 @@ $(document).ready(function () {
       <li><a href="#more-resources">More resources</a></li>
       <li><a href="#assignment-1">Assignment 1</a></li>
       </ul></li>
+      <li><a href="#lesson-2-objects-functions-and-vectors">Lesson 2: Objects, Functions, and Vectors</a><ul>
+      <li><a href="#creating-objects-in-r">Creating objects in R</a></li>
+      <li><a href="#vectors-and-data-types">Vectors and data types</a></li>
+      <li><a href="#subsetting-vectors">Subsetting vectors</a></li>
+      <li><a href="#assignment-2">Assignment 2</a></li>
+      <li><a href="#combining-and-changing-vectors">Combining and changing vectors</a></li>
+      <li><a href="#applying-functions-to-vectors">Applying functions to vectors</a></li>
+      <li><a href="#submit">Submit!</a></li>
+      </ul></li>
       </ul>
     </div>
     
@@ -1732,7 +1741,6 @@ $(document).ready(function () {
 <li>Under the <code>File</code> menu, click on <code>New Project</code>. Choose <code>New Directory</code>, then <code>New Project</code>.</li>
 <li>Enter a name for this new folder (or “directory”), and choose a convenient location for it. This will be your <strong>working directory</strong> for the rest of the day (e.g., <code>~/HONORS391/</code>).</li>
 <li>Click on <code>Create Project</code>.</li>
-<li>Download the <a href="TBD">code handout</a>, place it in your working directory and rename it (e.g., <code>script.R</code>).</li>
 <li>(Optional) Set Preferences to ‘Never’ save workspace in RStudio.</li>
 </ol>
 <p>A workspace is your current working environment in R which includes any user-defined object. By default, all of these objects will be saved, and automatically loaded, when you reopen your project. Saving a workspace to <code>.RData</code> can be cumbersome, especially if you are working with larger datasets, and it can lead to hard to debug errors by having objects in memory you forgot you had. To turn that off, go to Tools –&gt; ‘Global Options’ and select the ‘Never’ option for ‘Save workspace to .RData’ on exit.’</p>
@@ -1881,7 +1889,7 @@ max(pirates$height)
 <p>Descriptives for non-numeric data</p>
 <pre><code>## 3D: How many pirates are there of each sex?
 table(pirates$sex)
-## 3E (YOUR TURN!): # How many pirates were there of each age?</code></pre>
+## 3E (YOUR TURN!): # How many pirates use each sword type? (Hint:pirates$sword.type)</code></pre>
 </div>
 <div id="descriptive-statistics-for-non-numeric-data" class="section level3">
 <h3>4. Descriptive statistics for non-numeric data</h3>
@@ -2077,6 +2085,349 @@ chests.lm &lt;- lm(formula = tchests ~ age + weight + tattoos,
 summary(chests.lm)</code></pre>
 <p>That’s it! Now it’s time to submit your assignment! Save and email your wpa1LastFirst.R file to me.</p>
 </div>
+</div>
+</div>
+<div id="lesson-2-objects-functions-and-vectors" class="section level1">
+<h1>Lesson 2: Objects, Functions, and Vectors</h1>
+<p>I’m assuming that you have installed R and Rstudio by now. If you have had any problems, please start an issue on the Github page or, if we haven’t gotten there yet, send me an email.</p>
+<div id="creating-objects-in-r" class="section level2">
+<h2>Creating objects in R</h2>
+<p>You can get output from R simply by typing math in the console:</p>
+<pre><code>3 + 5
+12 / 7</code></pre>
+<p>However, to do useful and interesting things, we need to assign <em>values</em> to <em>objects</em>. To create an object, we need to give it a name followed by the assignment operator <code>&lt;-</code>, and the value we want to give it:</p>
+<pre><code>weight_kg &lt;- 55</code></pre>
+<p><code>&lt;-</code> is the assignment operator. It assigns values on the right to objects on the left. So, after executing <code>x &lt;- 3</code>, the value of <code>x</code> is <code>3</code>. The arrow also looks like a mouth (with tongue), which makes it easy to pronounce as <code>x</code> <strong>eats</strong> 3. For historical reasons, you can also use <code>=</code> for assignments, but not in every context. Because of the <a href="https://blog.revolutionanalytics.com/2008/12/use-equals-or-arrow-for-assignment.html">slight</a> <a href="https://r.789695.n4.nabble.com/Is-there-any-difference-between-and-tp878594p878598.html">differences</a> in syntax, it is good practice to always use <code>&lt;-</code> for assignments.</p>
+<p>In RStudio, typing <kbd>Alt</kbd> + <kbd>-</kbd> (push <kbd>Alt</kbd> at the same time as the <kbd>-</kbd> key) will write <code>&lt;-</code> in a single keystroke in a PC, while typing <kbd>Option</kbd> + <kbd>-</kbd> (push <kbd>Option</kbd> at the same time as the <kbd>-</kbd> key) does the same in a Mac.</p>
+<p>Objects can be given almost any name such as <code>x</code>, <code>current_temperature</code>, or <code>subject_id</code>. Here are some further guidelines on naming objects:</p>
+<ul>
+<li>You want your object names to be explicit and not too long.</li>
+<li>They cannot start with a number (<code>2x</code> is not valid, but <code>x2</code> is).</li>
+<li>R is case sensitive, so for example, <code>weight_kg</code> is different from <code>Weight_kg</code>.</li>
+<li>There are some names that cannot be used because they are the names of fundamental functions in R (e.g., <code>if</code>, <code>else</code>, <code>for</code>, see <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html">here</a> for a complete list). In general, even if it’s allowed, it’s best to not use other function names (e.g., <code>c</code>, <code>T</code>, <code>mean</code>, <code>data</code>, <code>df</code>, <code>weights</code>). If in doubt, check the help to see if the name is already in use.</li>
+<li>It’s best to avoid dots (<code>.</code>) within names. Many function names in R itself have them and dots also have a special meaning (methods) in R and other programming languages. To avoid confusion, don’t include dots in names.</li>
+<li>It is recommended to use nouns for object names and verbs for function names.</li>
+<li>Be consistent in the styling of your code, such as where you put spaces, how you name objects, etc. Using a consistent coding style makes your code clearer to read for your future self and your collaborators. In R, three popular style guides come from <a href="https://google.github.io/styleguide/Rguide.xml">Google</a>, <a href="https://jef.works/R-style-guide/">Jean Fan</a> and the <a href="https://style.tidyverse.org/">tidyverse</a>. The tidyverse style is very comprehensive and may seem overwhelming at first. You can install the <a href="https://github.com/jimhester/lintr"><strong><code>lintr</code></strong></a> package to automatically check for issues in the styling of your code.</li>
+</ul>
+<blockquote>
+<h3 id="objects-vs.-variables">Objects vs. variables</h3>
+<p>What are known as <code>objects</code> in <code>R</code> are known as <code>variables</code> in many other programming languages. Depending on the context, <code>object</code> and <code>variable</code> can have drastically different meanings. However, in this lesson, the two words are used synonymously. For more information see: <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects" class="uri">https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects</a></p>
+</blockquote>
+<p>When assigning a value to an object, R does not print anything. You can force R to print the value by using parentheses or by typing the object name:</p>
+<pre><code>weight_kg &lt;- 55    # doesn&#39;t print anything
+(weight_kg &lt;- 55)  # but putting parenthesis around the call prints the value of `weight_kg`
+weight_kg          # and so does typing the name of the object</code></pre>
+<p>Now that R has <code>weight_kg</code> in memory, we can do arithmetic with it. For instance, we may want to convert this weight into pounds (weight in pounds is 2.2 times the weight in kg):</p>
+<pre><code>2.2 * weight_kg</code></pre>
+<p>We can also change an object’s value by assigning it a new one:</p>
+<pre><code>weight_kg &lt;- 57.5
+2.2 * weight_kg</code></pre>
+<p>This means that assigning a value to one object does not change the values of other objects For example, let’s store the animal’s weight in pounds in a new object, <code>weight_lb</code>:</p>
+<pre><code>weight_lb &lt;- 2.2 * weight_kg</code></pre>
+<p>and then change <code>weight_kg</code> to 100.</p>
+<pre><code>weight_kg &lt;- 100</code></pre>
+<p>What do you think is the current content of the object <code>weight_lb</code>? 126.5 or 220?</p>
+<div id="saving-your-code" class="section level3">
+<h3>Saving your code</h3>
+<p>Up to now, your code has been in the console. This is useful for quick queries but not so helpful if you want to revisit your work for any reason. A script can be opened by pressing <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd>. It it wise to save your script file immediately. To do this press <kbd>Ctrl</kbd> + <kbd>S</kbd>. This will open a dialogue box where you can decide where to save your script file, and what to name it. The <code>.R</code> file extension is added automatically and ensures your file will open with RStudio.</p>
+<p>Don’t forget to save your work periodically by pressing <kbd>Ctrl</kbd> + <kbd>S</kbd>.</p>
+</div>
+<div id="comments" class="section level3">
+<h3>Comments</h3>
+<p>The comment character in R is <code>#</code>, anything to the right of a <code>#</code> in a script will be ignored by R. It is useful to leave notes and explanations in your scripts. RStudio makes it easy to comment or uncomment a paragraph: after selecting the lines you want to comment, press at the same time on your keyboard <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>. If you only want to comment out one line, you can put the cursor at any location of that line (i.e. no need to select the whole line), then press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>.</p>
+</div>
+<div id="functions-and-their-arguments" class="section level3">
+<h3>Functions and their arguments</h3>
+<p>Functions are “canned scripts” that automate more complicated sets of commands including operations assignments, etc. Many functions are predefined, or can be made available by importing R <em>packages</em> (more on that later). A function usually takes one or more inputs called <em>arguments</em>. Functions often (but not always) return a <em>value</em>. A typical example would be the function <code>sqrt()</code>. The input (the argument) must be a number, and the return value (in fact, the output) is the square root of that number. Executing a function (‘running it’) is called <em>calling</em> the function. An example of a function call is:</p>
+<pre><code>weight_kg &lt;- sqrt(10)</code></pre>
+<p>Here, the value of 10 is given to the <code>sqrt()</code> function, the <code>sqrt()</code> function calculates the square root, and returns the value which is then assigned to the object <code>weight_kg</code>. This function is very simple, because it takes just one argument.</p>
+<p>The return ‘value’ of a function need not be numerical (like that of <code>sqrt()</code>), and it also does not need to be a single item: it can be a set of things, or even a dataset. We’ll see that when we read data files into R.</p>
+<p>Arguments can be anything, not only numbers or filenames, but also other objects. Exactly what each argument means differs per function, and must be looked up in the documentation (see below). Some functions take arguments which may either be specified by the user, or, if left out, take on a <em>default</em> value: these are called <em>options</em>. Options are typically used to alter the way the function operates, such as whether it ignores ‘bad values’, or what symbol to use in a plot. However, if you want something specific, you can specify a value of your choice which will be used instead of the default.</p>
+<p>Let’s try a function that can take multiple arguments: <code>round()</code>.</p>
+<pre><code>round(3.14159)</code></pre>
+<p>Here, we’ve called <code>round()</code> with just one argument, <code>3.14159</code>, and it has returned the value <code>3</code>. That’s because the default is to round to the nearest whole number. If we want more digits we can see how to do that by getting information about the <code>round</code> function. We can use <code>args(round)</code> to find what arguments it takes, or look at the help for this function using <code>?round</code>.</p>
+<pre><code>args(round)
+?round</code></pre>
+<p>We see that if we want a different number of digits, we can type <code>digits = 2</code> or however many we want.</p>
+<pre><code>round(3.14159, digits = 2)</code></pre>
+<p>If you provide the arguments in the exact same order as they are defined you don’t have to name them:</p>
+<pre><code>round(3.14159, 2)</code></pre>
+<p>And if you do name the arguments, you can switch their order:</p>
+<pre><code>round(digits = 2, x = 3.14159)</code></pre>
+<p>It’s good practice to put the non-optional arguments (like the number you’re rounding) first in your function call, and to then specify the names of all optional arguments. If you don’t, someone reading your code might have to look up the definition of a function with unfamiliar arguments to understand what you’re doing.</p>
+</div>
+</div>
+<div id="vectors-and-data-types" class="section level2">
+<h2>Vectors and data types</h2>
+<p>A vector is the most common and basic data type in R, and is pretty much the workhorse of R. A vector is composed by a series of values, which can be either numbers or characters. We can assign a series of values to a vector using the <code>c()</code> function. For example we can create a vector of animal weights and assign it to a new object <code>weight_g</code>:</p>
+<pre><code>weight_g &lt;- c(50, 60, 65, 82)
+weight_g</code></pre>
+<p>A vector can also contain characters:</p>
+<pre><code>animals &lt;- c(&quot;mouse&quot;, &quot;rat&quot;, &quot;dog&quot;)
+animals</code></pre>
+<p>The quotes around “mouse”, “rat”, etc. are essential here. Without the quotes R will assume objects have been created called <code>mouse</code>, <code>rat</code> and <code>dog</code>. As these objects don’t exist in R’s memory, there will be an error message.</p>
+<p>There are many functions that allow you to inspect the content of a vector. <code>length()</code> tells you how many elements are in a particular vector:</p>
+<pre><code>length(weight_g)
+length(animals)</code></pre>
+<p>An important feature of a vector, is that all of the elements are the same type of data. The function <code>class()</code> indicates what kind of object you are working with:</p>
+<pre><code>class(weight_g)
+class(animals)</code></pre>
+<p>The function <code>str()</code> provides an overview of the structure of an object and its elements. It is a useful function when working with large and complex objects:</p>
+<pre><code>str(weight_g)
+str(animals)</code></pre>
+<p>You can use the <code>c()</code> function to add other elements to your vector:</p>
+<pre><code>weight_g &lt;- c(weight_g, 90) # add to the end of the vector
+weight_g &lt;- c(30, weight_g) # add to the beginning of the vector
+weight_g</code></pre>
+<p>In the first line, we take the original vector <code>weight_g</code>, add the value <code>90</code> to the end of it, and save the result back into <code>weight_g</code>. Then we add the value <code>30</code> to the beginning, again saving the result back into <code>weight_g</code>.</p>
+<p>We can do this over and over again to grow a vector, or assemble a dataset. As we program, this may be useful to add results that we are collecting or calculating.</p>
+<p>An <strong>atomic vector</strong> is the simplest R <strong>data type</strong> and is a linear vector of a single type. Above, we saw 2 of the 6 main <strong>atomic vector</strong> types that R uses: <code>&quot;character&quot;</code> and <code>&quot;numeric&quot;</code> (or <code>&quot;double&quot;</code>). These are the basic building blocks that all R objects are built from. The other 4 <strong>atomic vector</strong> types are:</p>
+<ul>
+<li><code>&quot;logical&quot;</code> for <code>TRUE</code> and <code>FALSE</code> (the boolean data type)</li>
+<li><code>&quot;integer&quot;</code> for integer numbers (e.g., <code>2L</code>, the <code>L</code> indicates to R that it’s an integer)</li>
+<li><code>&quot;complex&quot;</code> to represent complex numbers with real and imaginary parts (e.g., <code>1 + 4i</code>) and that’s all we’re going to say about them</li>
+<li><code>&quot;raw&quot;</code> for bitstreams that we won’t discuss further</li>
+</ul>
+<p>You can check the type of your vector using the <code>typeof()</code> function and inputting your vector as the argument.</p>
+<p>Vectors are one of the many <strong>data structures</strong> that R uses. Other important ones are lists (<code>list</code>), matrices (<code>matrix</code>), data frames (<code>data.frame</code>), factors (<code>factor</code>) and arrays (<code>array</code>).</p>
+</div>
+<div id="subsetting-vectors" class="section level2">
+<h2>Subsetting vectors</h2>
+<p>If we want to extract one or several values from a vector, we must provide one or several indices in square brackets. For instance:</p>
+<pre><code>animals &lt;- c(&quot;mouse&quot;, &quot;rat&quot;, &quot;dog&quot;, &quot;cat&quot;)
+animals[2]
+animals[c(3, 2)]</code></pre>
+<p>We can also repeat the indices to create an object with more elements than the original one:</p>
+<pre><code>more_animals &lt;- animals[c(1, 2, 3, 2, 1, 4)]
+more_animals</code></pre>
+<p>R indices start at 1. Programming languages like Fortran, MATLAB, Julia, and R start counting at 1, because that’s what human beings typically do. Languages in the C family (including C++, Java, Perl, and Python) count from 0 because that’s simpler for computers to do.</p>
+<div id="conditional-subsetting" class="section level3">
+<h3>Conditional subsetting</h3>
+<p>Another common way of subsetting is by using a logical vector. <code>TRUE</code> will select the element with the same index, while <code>FALSE</code> will not:</p>
+<pre><code>weight_g &lt;- c(21, 34, 39, 54, 55)
+weight_g[c(TRUE, FALSE, FALSE, TRUE, TRUE)]</code></pre>
+<p>Typically, these logical vectors are not typed by hand, but are the output of other functions or logical tests. For instance, if you wanted to select only the values above 50:</p>
+<pre><code>weight_g &gt; 50    # will return logicals with TRUE for the indices that meet the condition
+## so we can use this to select only the values above 50
+weight_g[weight_g &gt; 50]</code></pre>
+<p>You can combine multiple tests using <code>&amp;</code> (both conditions are true, AND) or <code>|</code> (at least one of the conditions is true, OR):</p>
+<pre><code>weight_g[weight_g &gt; 30 &amp; weight_g &lt; 50]
+weight_g[weight_g &lt;= 30 | weight_g == 55]
+weight_g[weight_g &gt;= 30 &amp; weight_g == 21]</code></pre>
+<p>Here, <code>&gt;</code> for “greater than”, <code>&lt;</code> stands for “less than”, <code>&lt;=</code> for “less than or equal to”, and <code>==</code> for “equal to”. The double equal sign <code>==</code> is a test for numerical equality between the left and right hand sides, and should not be confused with the single <code>=</code> sign, which performs variable assignment (similar to <code>&lt;-</code>).</p>
+<p>A common task is to search for certain strings in a vector. One could use the “or” operator <code>|</code> to test for equality to multiple values, but this can quickly become tedious. The function <code>%in%</code> allows you to test if any of the elements of a search vector are found:</p>
+<pre><code>animals &lt;- c(&quot;mouse&quot;, &quot;rat&quot;, &quot;dog&quot;, &quot;cat&quot;, &quot;cat&quot;)
+
+# return both rat and cat
+animals[animals == &quot;cat&quot; | animals == &quot;rat&quot;] 
+
+# return a logical vector that is TRUE for the elements within animals that are found in the character vector and FALSE for those that are not
+animals %in% c(&quot;rat&quot;, &quot;cat&quot;, &quot;dog&quot;, &quot;duck&quot;, &quot;goat&quot;) 
+
+# use the logical vector created by %in% to return elements from animals that are found in the character vector
+animals[animals %in% c(&quot;rat&quot;, &quot;cat&quot;, &quot;dog&quot;, &quot;duck&quot;, &quot;goat&quot;)]</code></pre>
+</div>
+</div>
+<div id="assignment-2" class="section level2">
+<h2>Assignment 2</h2>
+<p>Here is your second Weekly Programming Assignment (WPA)! Open a new R script in R and save it as wpa_2_LastFirst (where Last and First is your last and first name). At the top of your script, make sure to put your header (name, date, etc).</p>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<pre><code># Vector of specific values
+
+c(37, 45, 23, 54, 66)   # Numeric
+c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;)   # Character
+
+# Vector of integers 1 to 5
+
+c(1, 2, 3, 4, 5)                       # using c()
+1:5                                    # using a:b
+seq(from = 1, to = 5, by = 1)          # using seq()
+seq(from = 1, to = 5, length.out = 5)  # same as above using length.out
+
+# Vector of multiples of 10 from 10 to 50
+
+c(10, 20, 30, 40, 50)
+seq(from = 10, to = 50, by = 10)
+seq(from = 10, to = 50, length.out = 5)
+
+# Assign vectors to objects
+
+data_A &lt;- c(37, 45, 23, 54, 66)
+data_B &lt;- seq(from = 1, to = 100, by = 2)
+
+# Calculate descriptive statistics
+
+mean(c(37, 45, 23, 54, 66))
+mean(data_A)
+
+median(seq(from = 1, to = 100, by = 2))
+median(data_B)
+
+# Vector arithmetic
+
+a &lt;- c(1, 2, 3, 4, 5)
+a * 10   # Multiply all elements by 10
+a + .5   # Add .5 to all elements
+
+b &lt;- c(10, 20, 30, 40, 50)
+a + b    # Add a and b element-wise</code></pre>
+</div>
+<div id="does-drinking-non-alcoholic-beer-affect-cognitive-performance" class="section level3">
+<h3>Does drinking non-alcoholic beer affect cognitive performance?</h3>
+<p>A psychologist has a theory that some of the negative cognitive effects of alcohol are the result of psychological rather than physiological processes. To test this, she has 12 participants perform a cognitive test before and after drinking non-alcoholic beer which was labeled to contain 5% alcohol. Results from the study, including some demographic data, are presented in the following table. Note that higher scores on the test indicate better performance.</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>before</th>
+<th>after</th>
+<th>age</th>
+<th>sex</th>
+<th>eye_color</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>45</td>
+<td>43</td>
+<td>20</td>
+<td>male</td>
+<td>blue</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>49</td>
+<td>50</td>
+<td>19</td>
+<td>female</td>
+<td>blue</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>40</td>
+<td>61</td>
+<td>22</td>
+<td>male</td>
+<td>brown</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>48</td>
+<td>44</td>
+<td>20</td>
+<td>female</td>
+<td>brown</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>44</td>
+<td>45</td>
+<td>27</td>
+<td>male</td>
+<td>blue</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>70</td>
+<td>20</td>
+<td>22</td>
+<td>female</td>
+<td>blue</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>90</td>
+<td>85</td>
+<td>22</td>
+<td>male</td>
+<td>brown</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>75</td>
+<td>65</td>
+<td>20</td>
+<td>female</td>
+<td>brown</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>80</td>
+<td>72</td>
+<td>25</td>
+<td>male</td>
+<td>blue</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>65</td>
+<td>65</td>
+<td>22</td>
+<td>female</td>
+<td>blue</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>80</td>
+<td>70</td>
+<td>24</td>
+<td>male</td>
+<td>brown</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>52</td>
+<td>75</td>
+<td>22</td>
+<td>female</td>
+<td>brown</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="creating-vectors-from-scratch" class="section level3">
+<h3>Creating vectors from scratch</h3>
+<p>We’ll start by creating vector objects representing each vector of data (i.e.; column from the table above) from the study.</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a vector of the id data called <code>id</code> using the <code>c()</code> function.</p></li>
+<li><p>Now, create the <code>id</code> vector again, but this time use the <code>a:b</code> function.</p></li>
+<li><p>Now create the <code>id</code> vector again! But this time use the <code>seq()</code> function. To get help on this function, look at the help menu with <code>?seq</code></p></li>
+<li><p>Create a vector of the before drink data called <code>before</code> using <code>c()</code>.</p></li>
+<li><p>Create a vector of the after drink data called <code>after</code> using <code>c()</code>.</p></li>
+<li><p>Create a vector of the age data called <code>age</code> using <code>c()</code>.</p></li>
+<li><p>Create a vector of the sex data called <code>sex</code> but don’t use just the <code>c()</code> function (that would be a lot of typing…). Instead, just repeat the vector <code>c(&quot;male&quot;, &quot;female&quot;)</code> several times using the <code>rep()</code> function.</p></li>
+<li><p>Create a vector of the eye color data called <code>eye_color</code> using the <code>rep()</code> function.</p></li>
+</ol>
+</div>
+</div>
+<div id="combining-and-changing-vectors" class="section level2">
+<h2>Combining and changing vectors</h2>
+<ol start="9" style="list-style-type: decimal">
+<li><p>Create a new vector called <code>age_months</code> that shows the participants’ age in months instead of years. (Hint: Just multiply each age value by 12)</p></li>
+<li><p>Oops! It turns out that the watch used to measure time was off. All the before times are 1 second too fast, and all the after times are 1 second too slow. Correct these values by using simple arithmetic and then (re)assigning the objects with <code>&lt;-</code>!</p></li>
+<li><p>Create a new vector called <code>change</code> that shows the change in participants’ scores from before to after (Hint: Just subtract one vector from the other)</p></li>
+<li><p>Create a new vector called <code>average</code> that shows the participants’ <em>average</em> score across both tests. That is, the first element of <code>average</code> should be the average of the first participant’s two scores, and the second element should be the average of the second participant’s two scores…(Hint: Don’t use the <code>mean()</code> function! Instead, use basic arithmetic with <code>+</code> and <code>/</code>. That is, the elements of <code>average</code> should be <code>before</code> plus <code>after</code> divided by 2.)</p></li>
+</ol>
+</div>
+<div id="applying-functions-to-vectors" class="section level2">
+<h2>Applying functions to vectors</h2>
+<ol start="13" style="list-style-type: decimal">
+<li><p>How many elements are in <em>each</em> of the original data vectors? (Hint: use <code>length()</code>). If the number of elements in each is not the same, you typed something in wrong!</p></li>
+<li><p>What was the standard deviation of ages? Assign the result to a scaler object called <code>age_sd</code>.</p></li>
+<li><p>What is the median age? Assign the result to a scaler object called <code>age_median</code>.</p></li>
+<li><p>How many people were there of each sex? (Hint: use <code>table()</code>)</p></li>
+<li><p>What percent of people had each sex? (Hint: use <code>table()</code> then divide by its sum with <code>sum()</code>)</p></li>
+<li><p>Calculate the mean of the <code>sex</code> column. What happens and why?</p></li>
+<li><p>What was the mean <code>before</code> time? Assign the result to a scaler object called <code>before_mean</code>.</p></li>
+<li><p>What was the mean <code>after</code> time? Assign the result to a scaler object called <code>after_mean</code>.</p></li>
+<li><p>What was the difference in the mean <code>before</code> times and the mean <code>after</code> times? Calculate this in two ways: once using the <code>change</code> vector, and once using the <code>before_mean</code> and <code>after_mean</code> objects. You should get the same answer for both!</p></li>
+</ol>
+</div>
+<div id="submit" class="section level2">
+<h2>Submit!</h2>
+<p>That’s it! Now it’s time to submit your assignment! Save and email your wpa2LastFirst.R file to me.</p>
 </div>
 </div>
 </div>
