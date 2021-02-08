@@ -1196,7 +1196,7 @@ We'll start by creating vector objects representing each vector of data (i.e.; c
 
 8. Create a vector of the eye color data called `eye_color` using the `rep()` function.
 
-## Combining and changing vectors
+### Combining and changing vectors
 
 9. Create a new vector called `age_months` that shows the participants' age in months instead of years. (Hint: Just multiply each age value by 12)
 
@@ -1207,7 +1207,7 @@ We'll start by creating vector objects representing each vector of data (i.e.; c
 12. Create a new vector called `average` that shows the participants' *average* score across both tests. That is, the first element of `average` should be the average of the first participant's two scores, and the second element should be the average of the second participant's two scores...(Hint: Don't use the `mean()` function! Instead, use basic arithmetic with `+` and `/`. That is, the elements of `average` should be `before` plus `after` divided by 2.)
 
 
-## Applying functions to vectors
+### Applying functions to vectors
 
 13. How many elements are in *each* of the original data vectors? (Hint: use `length()`). If the number of elements in each is not the same, you typed something in wrong!
 
@@ -1228,6 +1228,6 @@ We'll start by creating vector objects representing each vector of data (i.e.; c
 21. What was the difference in the mean `before` times and the mean `after` times? Calculate this in two ways: once using the `change` vector, and once using the `before_mean` and `after_mean` objects. You should get the same answer for both!
 
 
-## Submit!
+### Submit!
 
-That's it! Now it's time to submit your assignment! Save and email your wpa2LastFirst.R file to me. 
+That's it! Now it's time to submit your assignment! Save your wpa2LastFirst.R file and answer the questions on Moodle. 
