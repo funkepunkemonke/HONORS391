@@ -1497,45 +1497,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
 
 
 
@@ -1591,6 +1552,13 @@ $(document).ready(function () {
       <li><a href="#vectors-and-data-types">Vectors and data types</a></li>
       <li><a href="#subsetting-vectors">Subsetting vectors</a></li>
       <li><a href="#assignment-2">Assignment 2</a></li>
+      </ul></li>
+      <li><a href="#lesson-3-matrices-and-dataframes">Lesson 3: Matrices and Dataframes</a><ul>
+      <li><a href="#matrix-in-r">Matrix in R</a></li>
+      <li><a href="#dataframes-in-r">DataFrames in R</a></li>
+      <li><a href="#indexing-and-subsetting-data-frames">Indexing and subsetting data frames</a></li>
+      <li><a href="#factors">Factors</a></li>
+      <li><a href="#assignment-3">Assignment 3</a></li>
       </ul></li>
       </ul>
     </div>
@@ -2424,6 +2392,224 @@ a + b    # Add a and b element-wise</code></pre>
 <div id="submit" class="section level3">
 <h3>Submit!</h3>
 <p>That’s it! Now it’s time to submit your assignment! Save your wpa2LastFirst.R file and answer the questions on Moodle.</p>
+</div>
+</div>
+</div>
+<div id="lesson-3-matrices-and-dataframes" class="section level1">
+<h1>Lesson 3: Matrices and Dataframes</h1>
+<p>By now, you should be comfortable with scalar and vector objects. However, you may have noticed that neither object types are appropriate for storing lots of data - such as the results of a survey or experiment. Thankfully, R has two object types that represent large data structures much better: <strong>matrices and dataframes</strong>.</p>
+<p>While matrices and dataframes look very similar, they aren’t exactly the same. While a matrix can contain either character or numeric columns, a dataframe can contain both numeric and character columns.Because dataframes are more flexible, most real-world datasets, such as surveys containing both numeric (e.g.; age, response times) and character (e.g.; sex, favorite movie) data, will be stored as dataframes in R.</p>
+<div id="matrix-in-r" class="section level2">
+<h2>Matrix in R</h2>
+<p>It’s a homogeneous collection of data sets which is arranged in a two dimensional rectangular organization. It’s a m*n array with similar data type. It is created using a vector input. It has a fixed number of rows and columns. You can perform many arithmetic operations on R matrix like - addition, subtraction, multiplication, and divisions. For Example:</p>
+<pre><code>A = matrix (c(11, 22, 33, 44, 55, 66),  
+        nrow = 2, ncol = 3, byrow = 1)
+A</code></pre>
+<p>Let’s use some functions to create a matrix with the numbers 1 through 30. First, we’ll create three vectors of length 5, then we’ll combine them into one matrix. As you will see, the <code>cbind()</code> function will combine the vectors as columns in the final matrix, while the <code>rbind()</code> function will combine them as rows.</p>
+<pre><code>x &lt;- 1:5
+y &lt;- 6:10
+z &lt;- 11:15
+
+# Create a matrix where x, y and z are columns
+cbind(x, y, z)
+
+# Create a matrix where x, y and z are rows
+rbind(x, y, z)</code></pre>
+</div>
+<div id="dataframes-in-r" class="section level2">
+<h2>DataFrames in R</h2>
+<p>It is used for storing data tables. It can contain multiple data types in multiple columns called fields. It is a list of vector of equal length. It is a generalized form of a matrix. It is like a table in excel sheets. It has column and row names. The name of rows are unique with no empty columns. The data stored must be numeric, character or factor type.</p>
+<p>Data frames are the de facto data structure for most tabular data, and what we use for statistics and plotting.</p>
+<p>We will take those Vectors that you made in the last lesson and put them into a dataframe. To create a dataframe from vectors, use the <code>data.frame()</code> function. If you still have the vectors loaded, you can:</p>
+<pre><code>noalchol &lt;- data.frame(before, after, age, sex, eye_color)</code></pre>
+<p>Otherwise, you can write it from scratch in one code segment:</p>
+<pre><code>noalchol &lt;- data.frame(
+    before = c(45,49,40,48,44,70,90,75,80,65,80,52),
+    after = c(43, 50, 61, 44, 45, 20, 85, 65, 72, 65, 70, 75),
+    age = c(20, 19, 22, 20, 27, 22, 22, 20, 25, 22, 24, 22),
+    sex = rep(c(&quot;male&quot;, &quot;female&quot;), times = 6),
+    eye_color = rep(c(&quot;blue&quot;, &quot;brown&quot;), each = 2, times = 3),
+    stringsAsFactors = FALSE)   # Don&#39;t convert strings to factors!
+    </code></pre>
+<p>There is one key argument to <code>data.frame()</code> and similar functions called <code>stringsAsFactors</code>. By default, the <code>data.frame()</code> function will automatically convert any string columns to a specific type of object called a <strong>factor</strong> in R. A factor is a nominal variable that has a well-specified possible set of values that it can take on. For example, one can create a factor <code>sex</code> that can only take on the values <code>&quot;male&quot;</code> and <code>&quot;female&quot;</code>. We will come back to this later in the lesson.</p>
+<div id="explore-the-noalchol-dataset" class="section level3">
+<h3>Explore the noalchol dataset</h3>
+<p>R has lots of functions for viewing matrices and dataframes and returning information about them. To see the first few rows of a dataframe, use <code>head()</code>, to see the last few rows, use <code>tail()</code>. To see an entire dataframe in a separate window that looks like spreadsheet, use ‘View()’. Note the capital V in View.</p>
+<pre><code>head(noalchol)     # Show me the first few rows
+str(noalchol)      # Show me the structure of the data
+View(noalchol)     # Open the data in a new window
+names(noalchol)    # What are the names of the columns?
+dim(noalchol)     # How many columns and rows are there in the data?</code></pre>
+</div>
+<div id="calculating-statistics-from-column-vectors" class="section level3">
+<h3>Calculating statistics from column vectors</h3>
+<p>And you can calculate various statistics:To get summary statistics on all columns in a dataframe, use the <code>summary()</code> function.</p>
+<pre><code>summary(noalchol)        #summary statistics for each column
+mean(noalchol$age)       # What was the mean age?
+table(noalchol$before)   # What was the mean before time?
+max(noalchol$after)      # What was the mean after time?</code></pre>
+</div>
+<div id="adding-new-columns" class="section level3">
+<h3>Adding new columns</h3>
+<p>You can add new columns to a dataframe using the <code>$</code> and assignment <code>&lt;-</code> operators. To do this, just use the <code>df$name</code> notation and assign a new vector of data to it.</p>
+<pre><code>noalchol$id &lt;- 1:nrow(noalchol)
+noalchol$age.decades &lt;-  noalchol$age / 10
+noalchol$diff &lt;- after-before</code></pre>
+</div>
+</div>
+<div id="indexing-and-subsetting-data-frames" class="section level2">
+<h2>Indexing and subsetting data frames</h2>
+<p>Our survey data frame has rows and columns (it has 2 dimensions), if we want to extract some specific data from it, we need to specify the “coordinates” we want from it. Row numbers come first, followed by column numbers. However, note that different ways of specifying these coordinates lead to results with different classes.</p>
+<pre><code># first element in the first column of the data frame (as a vector)
+noalchol[1, 1]   
+# first element in the 6th column (as a vector)
+noalchol[1, 6]   
+# first column of the data frame (as a vector)
+noalchol[, 1]    
+# first column of the data frame (as a data.frame)
+noalchol[1]      
+# first three rows of the 6th column (as a vector)
+noalchol[1:3, 6] 
+# the 3rd row of the data frame (as a data.frame)
+noalchol[3, ]    
+# equivalent to head_noalchol &lt;- head(noalchol)
+head_noalchol &lt;- noalchol[1:6, ] </code></pre>
+<p><code>:</code> is a special function that creates numeric vectors of integers in increasing or decreasing order, test <code>1:10</code> and <code>10:1</code> for instance.</p>
+<p>You can also exclude certain indices of a data frame using the “<code>-</code>” sign:</p>
+<pre><code>noalchol[, -1]          # The whole data frame, except the first column
+noalchol[-(7:12), ] # Equivalent to head(noalchol)</code></pre>
+<p>One of the nice things about dataframes is that each column will have a name. You can use these name to access specific columns by name without having to know which column number it is. Data frames can be subset by calling indices (as shown previously), but also by calling their column names directly:</p>
+<pre><code>noalchol[&quot;age&quot;]
+noalchol$sex</code></pre>
+<div id="solve-more-complex-questions-with-indexing" class="section level3">
+<h3>Solve more complex questions with indexing</h3>
+<p>The subset() function is one of the most useful data management functions in R. It allows you to slice and dice datasets just like you would with brackets, but the code is much easier to write.</p>
+<p>What were the eye colors of people younger than 21 years?</p>
+<pre><code>with(noalchol, eye_color[age &lt; 21])</code></pre>
+<p>What percent of people with brown eyes did the poorly on the test?</p>
+<pre><code>with(subset(noalchol, eye_color == &quot;brown&quot;), mean(diff &lt; 0))</code></pre>
+<p>Create a dataframe containing only data from people younger than 21 years.</p>
+<pre><code>underage&lt;- subset(noalchol, age &lt; 21)</code></pre>
+</div>
+</div>
+<div id="factors" class="section level2">
+<h2>Factors</h2>
+<p>When we did <code>str(noalchol)</code> we saw that several of the columns consist of integers. The columns <code>sex</code> and <code>eye_color</code> are of the class <code>character</code>. Arguably, these columns contain categorical data, that is, they can only take on a limited number of values.</p>
+<p>R has a special class for working with categorical data, called <code>factor</code>. Factors are very useful and actually contribute to making R particularly well suited to working with data. So we are going to spend a little time introducing them.</p>
+<p>Once created, factors can only contain a pre-defined set of values, known as <em>levels</em>. Factors are stored as integers associated with labels and they can be ordered or unordered. While factors look (and often behave) like character vectors, they are actually treated as integer vectors by R. So you need to be very careful when treating them as strings.</p>
+<p>When importing a data frame with, the columns that contain text are not automatically coerced (=converted) into the <code>factor</code> data type, but once we have loaded the data we can do the conversion using the <code>factor()</code> function:</p>
+<pre><code>noalchol$sex &lt;- factor(noalchol$sex)</code></pre>
+<p>We can see that the conversion has worked by using the <code>str</code> function. You can see the level of the factors by using <code>levels</code>.</p>
+<pre><code>str(noalchol)
+levels(noalchol$sex)
+nlevels(noalchol$sex)</code></pre>
+<p>When your data is stored as a factor, you can use the plot() function to get a quick glance at the number of observations represented by each factor level. Let’s look at the number of males and females captured over the course of the experiment:</p>
+<pre><code>plot(noalchol$sex)</code></pre>
+</div>
+<div id="assignment-3" class="section level2">
+<h2>Assignment 3</h2>
+<p>Here is your third Weekly Programming Assignment (WPA)! You know to save it and put a header.</p>
+<div id="examples-1" class="section level3">
+<h3>Examples</h3>
+<pre><code># Create a dataframe called study
+
+study &lt;- data.frame(id = c(1:8),
+                    sex = c(&quot;m&quot;, &quot;f&quot;, &quot;m&quot;, &quot;m&quot;, &quot;m&quot;, &quot;f&quot;, &quot;m&quot;, &quot;x34&quot;),
+                    age = c(28, 24, 19, 23, 42, 32, 27, 24),
+                    eyecolor = c(&quot;blue&quot;, &quot;brown&quot;, &quot;brown&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;brown&quot;, &quot;blue&quot;, &quot;green&quot;),
+                    group = c(1, 1, 1, 1, 2, 2, 2, 2),
+                    score = c(78, 65, 94, 92, 84, 86, 92, 86),
+                    stringsAsFactors = FALSE)
+
+# Summary statistics from specific columns
+
+mean(study$age)         # Mean age
+table(study$sex)        # Counts of each sex
+mean(study$sex == &quot;m&quot;)  # Percent that are men
+mean(study$eyecolor %in% c(&quot;blue&quot;, &quot;brown&quot;)) # Percent of eye colors that are blue or brown
+
+# Indexing
+
+study[1:5,]                           # First 5 rows
+study[6:10, c(&quot;id&quot;, &quot;sex&quot;, &quot;score&quot;)]  # Rows 6-10 and columns id, sex and score
+
+# Subsetting
+
+study_men &lt;- subset(study, sex == &quot;m&quot;)
+study_g1 &lt;- subset(study, group == 1)
+study_g2 &lt;- subset(study, group == 2)
+
+# Different ways to do the same subsetting
+
+# Q: What is the mean score of group 2?
+
+study_g2 &lt;- subset(study, group == 2)   # Method 1A: Create study_g2 dataframe
+mean(study_g2$score)                    #        1B: Calculate mean of study_g2$score
+
+mean(subset(study, group == 2)$score)        # Method 2: Same as method 1 but in one step
+with(subset(study, group == 2), mean(score)) # Method 3: Using with() and subset() 
+mean(study$score[study$group == 2])          # Method 4: Using []
+
+# Q: What percent of women over the age of 20 had brown eyes?
+
+study.women &lt;- subset(study, sex == &quot;f&quot; &amp; age &gt; 20)           #  Method 1A: 
+mean(study.women$eyecolor == &quot;brown&quot;)                         #         1B: 
+
+mean(subset(study, sex == &quot;f&quot; &amp; age &gt; 20)$eyecolor == &quot;brown&quot;)         # Method 2: 
+with(subset(study, sex == &quot;f&quot; &amp; age &gt; 20), mean(eyecolor == &quot;brown&quot;))  # Method 3: 
+mean(study$eyecolor[study$sex == &quot;f&quot; &amp; study$age &gt; 20] == &quot;brown&quot;)     # Method 4: 
+
+# Changing values of a vector in a dataframe
+
+# Change sex values that are NOT f or m to NA
+study$sex[study$sex %in% c(&quot;f&quot;, &quot;m&quot;) == FALSE] &lt;- NA
+
+# Change &quot;f&quot; to &quot;female&quot;, and &quot;m&quot; to &quot;male&quot;
+study$sex[study$sex == &quot;f&quot;] &lt;- &quot;female&quot;
+study$sex[study$sex == &quot;m&quot;] &lt;- &quot;male&quot;
+
+# Changing column names
+
+# Change name of first column to participant.id
+names(study)[1] &lt;- &quot;patient.id&quot;
+
+# Change the name of columns 2 through 4
+names(study)[2:4] &lt;- c(&quot;gender&quot;, &quot;age_years&quot;, &quot;eye&quot;)
+
+# Change name of group column to condition
+names(study)[names(study) == &quot;group&quot;] &lt;- &quot;condition&quot;</code></pre>
+</div>
+<div id="a-pirates-life-for-me" class="section level3">
+<h3>A Pirate’s life for me!</h3>
+<p>In this assignment, you’re going to explore the <code>pirates</code> data set to find the attributes necessary to find good swordsmen for a Pirate crew. If you are in the Pirating business (and I’m not talking about illegally downloading music or movies) - I hope you find this assignment beneficial for finding your future mateys for sailing the seven seas.If you’re not, I hope this can serve as a light-hearted example on how to explore data and make some inferences before getting into actual modelling.</p>
+<ol style="list-style-type: decimal">
+<li><p>Load the data</p>
+<p>library(yarrr) pirates&lt;-pirates</p></li>
+<li><p>Get to know the data using <code>View()</code>, <code>summary()</code>, <code>head()</code> and <code>str()</code>.</p></li>
+<li><p>Look at the names of the dataframe with <code>names()</code>.</p></li>
+<li><p>What was the mean number of parrots per pirate?</p></li>
+<li><p>What was the median sword time?</p></li>
+<li><p>What percent of pirates have an eye patch?<br />
+</p></li>
+<li><p>Sword time is currently in seconds. Add a new column to the dataframe called sword_m that shows the sword time in minutes rather than seconds.</p></li>
+<li><p>What was the median sword time (in minutes)?</p></li>
+<li><p>What were the sexes of the first 10 pirates?</p></li>
+<li><p>What was the data for the 50th pirate?</p></li>
+<li><p>What was the mean sword time for females?</p></li>
+<li><p>What was the mean sword time for pirates less than 27 years old?</p></li>
+<li><p>What was the mean sword time for females with tattoos?</p></li>
+<li><p>What was the mean sword time for males over 27 years old without tattoos? 15a. Run the following lines of code and look at the resulting objects. Are they the same or different?</p>
+<p>v1 &lt;- pirates$sword.time v2 &lt;- pirates[“sword.time”] v3 &lt;- pirates[,names(pirates) == “sword.time”] 15b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?</p>
+<p>vA &lt;- pirates$sword.time vB &lt;- subset(pirates, select = “sword.time”)</p></li>
+</ol>
+<p>15c. Based on what you’ve learned in the previous question, run the following code and see what happens. Can you explain why?</p>
+<pre><code>mean(vA)
+mean(vB)</code></pre>
+</div>
+<div id="submit-1" class="section level3">
+<h3>Submit!</h3>
+<p>Choosing mateys is no laughing matter, lets see what we can offer as advice to our Pirate recruiters!</p>
+<p>Save your file and answer the questions on Moodle. No need to email it to me.</p>
 </div>
 </div>
 </div>

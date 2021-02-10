@@ -1116,6 +1116,7 @@ a search vector are found:
 Here is your second Weekly Programming Assignment (WPA)! Open a new R script in R and save it as wpa_2_LastFirst (where Last and First is your last and first name). At the top of your script, make sure to put your header (name, date, etc).
 
 ### Examples
+
     # Vector of specific values
     
     c(37, 45, 23, 54, 66)   # Numeric
@@ -1231,3 +1232,268 @@ We'll start by creating vector objects representing each vector of data (i.e.; c
 ### Submit!
 
 That's it! Now it's time to submit your assignment! Save your wpa2LastFirst.R file and answer the questions on Moodle. 
+
+# Lesson 3: Matrices and Dataframes
+
+By now, you should be comfortable with scalar and vector objects. However, you may have noticed that neither object types are appropriate for storing lots of data - such as the results of a survey or experiment. Thankfully, R has two object types that represent large data structures much better: **matrices and dataframes**.
+
+While matrices and dataframes look very similar, they aren't exactly the same. While a matrix can contain either character or numeric columns, a dataframe can contain both numeric and character columns.Because dataframes are more flexible, most real-world datasets, such as surveys containing both numeric (e.g.; age, response times) and character (e.g.; sex, favorite movie) data, will be stored as dataframes in R.
+
+## Matrix in R
+It's a homogeneous collection of data sets which is arranged in a two dimensional rectangular organization. It's a m*n array with similar data type. It is created using a vector input. It has a fixed number of rows and columns. You can perform many arithmetic operations on R matrix like - addition, subtraction, multiplication, and divisions. For Example:
+
+    A = matrix (c(11, 22, 33, 44, 55, 66),  
+            nrow = 2, ncol = 3, byrow = 1)
+    A
+    
+Let's use some functions to create a matrix with the numbers 1 through 30. First, we'll create three vectors of length 5, then we'll combine them into one matrix. As you will see, the `cbind()` function will combine the vectors as columns in the final matrix, while the `rbind()` function will combine them as rows.
+    
+    x <- 1:5
+    y <- 6:10
+    z <- 11:15
+    
+    # Create a matrix where x, y and z are columns
+    cbind(x, y, z)
+    
+    # Create a matrix where x, y and z are rows
+    rbind(x, y, z)
+
+    
+## DataFrames in R    
+It is used for storing data tables. It can contain multiple data types in multiple columns called fields. It is a list of vector of equal length. It is a generalized form of a matrix. It is like a table in excel sheets. It has column and row names. The name of rows are unique with no empty columns. The data stored must be numeric, character or factor type. 
+
+Data frames are the de facto data structure for most tabular data, and what we use for statistics and plotting.
+
+We will take those Vectors that you made in the last lesson and put them into a dataframe. To create a dataframe from vectors, use the `data.frame()` function.  If you still have the vectors loaded, you can:
+   
+    noalchol <- data.frame(before, after, age, sex, eye_color)
+    
+Otherwise, you can write it from scratch in one code segment:    
+    
+    noalchol <- data.frame(
+        before = c(45,49,40,48,44,70,90,75,80,65,80,52),
+        after = c(43, 50, 61, 44, 45, 20, 85, 65, 72, 65, 70, 75),
+        age = c(20, 19, 22, 20, 27, 22, 22, 20, 25, 22, 24, 22),
+        sex = rep(c("male", "female"), times = 6),
+        eye_color = rep(c("blue", "brown"), each = 2, times = 3),
+        stringsAsFactors = FALSE)   # Don't convert strings to factors!
+        
+There is one key argument to `data.frame()` and similar functions called `stringsAsFactors`. By default, the `data.frame()` function will automatically convert any string columns to a specific type of object called a **factor** in R. A factor is a nominal variable that has a well-specified possible set of values that it can take on. For example, one can create a factor `sex` that can only take on the values `"male"` and `"female"`. We will come back to this later in the lesson. 
+        
+### Explore the noalchol dataset
+
+R has lots of functions for viewing matrices and dataframes and returning information about them. To see the first few rows of a dataframe, use `head()`, to see the last few rows, use `tail()`. To see an entire dataframe in a separate window that looks like spreadsheet, use 'View()'. Note the capital V in View. 
+
+    head(noalchol)     # Show me the first few rows
+    str(noalchol)      # Show me the structure of the data
+    View(noalchol)     # Open the data in a new window
+    names(noalchol)    # What are the names of the columns?
+    dim(noalchol)     # How many columns and rows are there in the data?
+    
+### Calculating statistics from column vectors
+And you can calculate various statistics:To get summary statistics on all columns in a dataframe, use the `summary()` function.
+ 
+    summary(noalchol)        #summary statistics for each column
+    mean(noalchol$age)       # What was the mean age?
+    table(noalchol$before)   # What was the mean before time?
+    max(noalchol$after)      # What was the mean after time?
+    
+### Adding new columns
+You can add new columns to a dataframe using the `$` and assignment `<-` operators. To do this, just use the `df$name` notation and assign a new vector of data to it.
+
+    noalchol$id <- 1:nrow(noalchol)
+    noalchol$age.decades <-  noalchol$age / 10
+    noalchol$diff <- after-before
+
+## Indexing and subsetting data frames
+Our survey data frame has rows and columns (it has 2 dimensions), if we want to extract some specific data from it, we need to specify the "coordinates" we want from it. Row numbers come first, followed by column numbers. However, note that different ways of specifying these coordinates lead to results with different classes.
+
+    # first element in the first column of the data frame (as a vector)
+    noalchol[1, 1]   
+    # first element in the 6th column (as a vector)
+    noalchol[1, 6]   
+    # first column of the data frame (as a vector)
+    noalchol[, 1]    
+    # first column of the data frame (as a data.frame)
+    noalchol[1]      
+    # first three rows of the 6th column (as a vector)
+    noalchol[1:3, 6] 
+    # the 3rd row of the data frame (as a data.frame)
+    noalchol[3, ]    
+    # equivalent to head_noalchol <- head(noalchol)
+    head_noalchol <- noalchol[1:6, ] 
+    
+`:` is a special function that creates numeric vectors of integers in increasing or decreasing order, test `1:10` and `10:1` for instance.
+
+You can also exclude certain indices of a data frame using the "`-`" sign:
+    
+    noalchol[, -1]          # The whole data frame, except the first column
+    noalchol[-(7:12), ] # Equivalent to head(noalchol)
+    
+One of the nice things about dataframes is that each column will have a name. You can use these name to access specific columns by name without having to know which column number it is. Data frames can be subset by calling indices (as shown previously), but also by calling their column names directly:
+
+    noalchol["age"]
+    noalchol$sex
+
+### Solve more complex questions with indexing
+The subset() function is one of the most useful data management functions in R. It allows you to slice and dice datasets just like you would with brackets, but the code is much easier to write.
+
+What were the eye colors of people younger than 21 years?
+  
+    with(noalchol, eye_color[age < 21])
+
+What percent of people with brown eyes did the poorly on the test?
+
+    with(subset(noalchol, eye_color == "brown"), mean(diff < 0))
+    
+Create a dataframe containing only data from people younger than 21 years.
+  
+    underage<- subset(noalchol, age < 21)
+    
+## Factors
+When we did `str(noalchol)` we saw that several of the columns consist of
+integers. The columns `sex` and `eye_color` are of the class `character`.
+Arguably, these columns contain categorical data, that is, they can only take on
+a limited number of values. 
+
+ R has a special class for working with categorical data, called `factor`. 
+Factors are very useful and actually contribute to making R particularly well 
+suited to working with data. So we are going to spend a little time introducing 
+them.
+
+Once created, factors can only contain a pre-defined set of values, known as
+*levels*. 
+Factors are stored as integers associated with labels and they can be ordered or unordered. While factors look (and often behave) like character vectors, they are actually treated as integer vectors by R. So you need to be very careful when treating them as strings.
+
+When importing a data frame with, the columns that contain text are not automatically coerced (=converted) into the `factor` data type, but once we have loaded the data we can do the conversion using the `factor()` function:
+
+    noalchol$sex <- factor(noalchol$sex)
+    
+We can see that the conversion has worked by using the `str` function. You can see the level of the factors by using `levels`. 
+
+    str(noalchol)
+    levels(noalchol$sex)
+    nlevels(noalchol$sex)
+
+When your data is stored as a factor, you can use the plot() function to get a quick glance at the number of observations represented by each factor level. Let's look at the number of males and females captured over the course of the experiment:
+
+    plot(noalchol$sex)
+    
+## Assignment 3
+Here is your third Weekly Programming Assignment (WPA)! You know to save it and put a header. 
+
+### Examples
+
+    # Create a dataframe called study
+    
+    study <- data.frame(id = c(1:8),
+                        sex = c("m", "f", "m", "m", "m", "f", "m", "x34"),
+                        age = c(28, 24, 19, 23, 42, 32, 27, 24),
+                        eyecolor = c("blue", "brown", "brown", "green", "blue", "brown", "blue", "green"),
+                        group = c(1, 1, 1, 1, 2, 2, 2, 2),
+                        score = c(78, 65, 94, 92, 84, 86, 92, 86),
+                        stringsAsFactors = FALSE)
+    
+    # Summary statistics from specific columns
+    
+    mean(study$age)         # Mean age
+    table(study$sex)        # Counts of each sex
+    mean(study$sex == "m")  # Percent that are men
+    mean(study$eyecolor %in% c("blue", "brown")) # Percent of eye colors that are blue or brown
+    
+    # Indexing
+    
+    study[1:5,]                           # First 5 rows
+    study[6:10, c("id", "sex", "score")]  # Rows 6-10 and columns id, sex and score
+    
+    # Subsetting
+    
+    study_men <- subset(study, sex == "m")
+    study_g1 <- subset(study, group == 1)
+    study_g2 <- subset(study, group == 2)
+    
+    # Different ways to do the same subsetting
+    
+    # Q: What is the mean score of group 2?
+    
+    study_g2 <- subset(study, group == 2)   # Method 1A: Create study_g2 dataframe
+    mean(study_g2$score)                    #        1B: Calculate mean of study_g2$score
+    
+    mean(subset(study, group == 2)$score)        # Method 2: Same as method 1 but in one step
+    with(subset(study, group == 2), mean(score)) # Method 3: Using with() and subset() 
+    mean(study$score[study$group == 2])          # Method 4: Using []
+    
+    # Q: What percent of women over the age of 20 had brown eyes?
+    
+    study.women <- subset(study, sex == "f" & age > 20)           #  Method 1A: 
+    mean(study.women$eyecolor == "brown")                         #         1B: 
+    
+    mean(subset(study, sex == "f" & age > 20)$eyecolor == "brown")         # Method 2: 
+    with(subset(study, sex == "f" & age > 20), mean(eyecolor == "brown"))  # Method 3: 
+    mean(study$eyecolor[study$sex == "f" & study$age > 20] == "brown")     # Method 4: 
+    
+    # Changing values of a vector in a dataframe
+    
+    # Change sex values that are NOT f or m to NA
+    study$sex[study$sex %in% c("f", "m") == FALSE] <- NA
+    
+    # Change "f" to "female", and "m" to "male"
+    study$sex[study$sex == "f"] <- "female"
+    study$sex[study$sex == "m"] <- "male"
+    
+    # Changing column names
+    
+    # Change name of first column to participant.id
+    names(study)[1] <- "patient.id"
+    
+    # Change the name of columns 2 through 4
+    names(study)[2:4] <- c("gender", "age_years", "eye")
+    
+    # Change name of group column to condition
+    names(study)[names(study) == "group"] <- "condition"
+    
+    
+### A Pirate's life for me!
+In this assignment, you're going to explore the `pirates` data set to find the attributes necessary to find good swordsmen for a Pirate crew. If you are in the Pirating business (and I'm not talking about illegally downloading music or movies) - I hope you find this assignment beneficial for finding your future mateys for sailing the seven seas.If you're not, I hope this can serve as a light-hearted example on how to explore data and make some inferences before getting into actual modelling.
+
+1. Load the data
+    
+    library(yarrr)
+    pirates<-pirates
+
+2. Get to know the data using `View()`, `summary()`, `head()` and `str()`.
+3. Look at the names of the dataframe with `names()`.
+4. What was the mean number of parrots per pirate? 
+5. What was the median sword time?
+6. What percent of pirates have an eye patch?  
+7. Sword time is currently in seconds. Add a new column to the dataframe called sword_m that shows the sword time in minutes rather than seconds.
+8. What was the median sword time (in minutes)?
+9. What were the sexes of the first 10 pirates?
+10. What was the data for the 50th pirate?
+11. What was the mean sword time for females?
+12. What was the mean sword time for pirates less than 27 years old?
+13. What was the mean sword time for females with tattoos?
+14. What was the mean sword time for males over 27 years old without tattoos?
+15a. Run the following lines of code and look at the resulting objects. Are they the same or different?
+   
+    v1 <- pirates$sword.time
+    v2 <- pirates["sword.time"]
+    v3 <- pirates[,names(pirates) == "sword.time"]
+15b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?
+
+    vA <- pirates$sword.time
+    vB <- subset(pirates, select = "sword.time")
+    
+15c. Based on what you've learned in the previous question, run the following code and see what happens. Can you explain why?
+
+    mean(vA)
+    mean(vB)
+    
+
+### Submit!
+Choosing mateys is no laughing matter, lets see what we can offer as advice to our Pirate recruiters!
+
+Save your file and answer the questions on Moodle. No need to email it to me.
+
+
+
