@@ -1457,9 +1457,10 @@ Here is your third Weekly Programming Assignment (WPA)! You know to save it and 
 In this assignment, you're going to explore the `pirates` data set to find the attributes necessary to find good swordsmen for a Pirate crew. If you are in the Pirating business (and I'm not talking about illegally downloading music or movies) - I hope you find this assignment beneficial for finding your future mateys for sailing the seven seas.If you're not, I hope this can serve as a light-hearted example on how to explore data and make some inferences before getting into actual modelling.
 
 1. Load the data
+
     
-    library(yarrr)
-    pirates<-pirates
+    library(yarrr);     pirates<-pirates
+
 
 2. Get to know the data using `View()`, `summary()`, `head()` and `str()`.
 3. Look at the names of the dataframe with `names()`.
