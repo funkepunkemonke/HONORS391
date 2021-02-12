@@ -1457,7 +1457,6 @@ Here is your third Weekly Programming Assignment (WPA)! You know to save it and 
 In this assignment, you're going to explore the `pirates` data set to find the attributes necessary to find good swordsmen for a Pirate crew. If you are in the Pirating business (and I'm not talking about illegally downloading music or movies) - I hope you find this assignment beneficial for finding your future mateys for sailing the seven seas.If you're not, I hope this can serve as a light-hearted example on how to explore data and make some inferences before getting into actual modelling.
 
 1. Load the data
-
     
     library(yarrr);     pirates<-pirates
 
@@ -1475,17 +1474,19 @@ In this assignment, you're going to explore the `pirates` data set to find the a
 12. What was the mean sword time for pirates less than 27 years old?
 13. What was the mean sword time for females with tattoos?
 14. What was the mean sword time for males over 27 years old without tattoos?
-15a. Run the following lines of code and look at the resulting objects. Are they the same or different?
+
+15 a. Run the following lines of code and look at the resulting objects. Are they the same or different?
    
     v1 <- pirates$sword.time
     v2 <- pirates["sword.time"]
     v3 <- pirates[,names(pirates) == "sword.time"]
-15b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?
+
+15 b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?
 
     vA <- pirates$sword.time
     vB <- subset(pirates, select = "sword.time")
     
-15c. Based on what you've learned in the previous question, run the following code and see what happens. Can you explain why?
+15 c. Based on what you've learned in the previous question, run the following code and see what happens. Can you explain why?
 
     mean(vA)
     mean(vB)

@@ -2584,7 +2584,7 @@ names(study)[names(study) == &quot;group&quot;] &lt;- &quot;condition&quot;</cod
 <p>In this assignment, you’re going to explore the <code>pirates</code> data set to find the attributes necessary to find good swordsmen for a Pirate crew. If you are in the Pirating business (and I’m not talking about illegally downloading music or movies) - I hope you find this assignment beneficial for finding your future mateys for sailing the seven seas.If you’re not, I hope this can serve as a light-hearted example on how to explore data and make some inferences before getting into actual modelling.</p>
 <ol style="list-style-type: decimal">
 <li><p>Load the data</p>
-<p>library(yarrr) pirates&lt;-pirates</p></li>
+<p>library(yarrr); pirates&lt;-pirates</p></li>
 <li><p>Get to know the data using <code>View()</code>, <code>summary()</code>, <code>head()</code> and <code>str()</code>.</p></li>
 <li><p>Look at the names of the dataframe with <code>names()</code>.</p></li>
 <li><p>What was the mean number of parrots per pirate?</p></li>
@@ -2598,11 +2598,16 @@ names(study)[names(study) == &quot;group&quot;] &lt;- &quot;condition&quot;</cod
 <li><p>What was the mean sword time for females?</p></li>
 <li><p>What was the mean sword time for pirates less than 27 years old?</p></li>
 <li><p>What was the mean sword time for females with tattoos?</p></li>
-<li><p>What was the mean sword time for males over 27 years old without tattoos? 15a. Run the following lines of code and look at the resulting objects. Are they the same or different?</p>
-<p>v1 &lt;- pirates$sword.time v2 &lt;- pirates[“sword.time”] v3 &lt;- pirates[,names(pirates) == “sword.time”] 15b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?</p>
-<p>vA &lt;- pirates$sword.time vB &lt;- subset(pirates, select = “sword.time”)</p></li>
+<li><p>What was the mean sword time for males over 27 years old without tattoos?</p></li>
 </ol>
-<p>15c. Based on what you’ve learned in the previous question, run the following code and see what happens. Can you explain why?</p>
+<p>15 a. Run the following lines of code and look at the resulting objects. Are they the same or different?</p>
+<pre><code>v1 &lt;- pirates$sword.time
+v2 &lt;- pirates[&quot;sword.time&quot;]
+v3 &lt;- pirates[,names(pirates) == &quot;sword.time&quot;]</code></pre>
+<p>15 b. Run the following lines of code and look at the resulting objects. Are they the same or different? If they are different, why?</p>
+<pre><code>vA &lt;- pirates$sword.time
+vB &lt;- subset(pirates, select = &quot;sword.time&quot;)</code></pre>
+<p>15 c. Based on what you’ve learned in the previous question, run the following code and see what happens. Can you explain why?</p>
 <pre><code>mean(vA)
 mean(vB)</code></pre>
 </div>
