@@ -2167,9 +2167,9 @@ In this WPA, we will analyze data from Matthews et al. (2016): Why do we overest
 
 2. Using getwd() print the current working directory of your project. This is the directory on your computer where your project is located.
 
-3. Now it's time to load the data. The data for this WPA are stored at http://journal.sjdm.org/15/15909/data1.csv. Load the data into R by using read.table() into a new object called matthews by running the following code. Once you have done this, kook at the first few rows of matthews using head(), and str() to make sure the data were loaded correctly into R.
+3. Now it's time to load the data. The data for this WPA are stored at http://journal.sjdm.org/15/15909/data1.csv. Load the data into R by using `read.table()` into a new object called matthews by running the following code. Once you have done this, kook at the first few rows of matthews using `head()`, and `str()` to make sure the data were loaded correctly into R.
 
-4. Now that you've loaded the data into R, let's save a local copy of the data as a text file called matthews.txt into your data folder. Using write.table(), save the data as a tab-delimited text file called matthews.txt 
+4. Now that you've loaded the data into R, let's save a local copy of the data as a text file called matthews.txt into your data folder. Using `write.table()`, save the data as a tab-delimited text file called matthews.txt 
 
 5. What are the names of the data columns?
 
@@ -2181,11 +2181,13 @@ In this WPA, we will analyze data from Matthews et al. (2016): Why do we overest
 
 9. Now use dplyr to do the same calculations using the following template. Do you get the same answers as before?
 
-    matthews %>%
+```r
+matthews %>%
     group_by(__) %>%
     summarise(
       N = n(),
       age_mean = mean(__)
     )
-    
+```
+
 10. The variable pcmore reflects the question: "What percent of people taking part in this survey do you think earn more than you do?". Using aggregate(), calculate the median value of this variable separately for each level of income. What does the result tell you?
