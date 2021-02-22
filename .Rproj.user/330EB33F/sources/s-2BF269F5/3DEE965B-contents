@@ -1,0 +1,113 @@
+---
+title: "Spatial Something of Sifka"
+author: "Amanda Suzzi"
+date: "12/02/2020"
+output: html_notebook
+---
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  comment = NA,
+  fig.width=8, fig.height=5,
+  cache=TRUE)
+
+library(tidyverse)
+library(knitr)
+library(here)
+library(readxl)
+library(leaflet)
+library(raster)
+
+here <- here::here
+
+
+# relative paths to project folders
+data_folder <- "data" # path to data that are imported
+output_folder <- "output" # path to data that are saved
+image_folder <- "images"
+```
+
+
+
+Importing occurrence data of Coquerel's sifaka (Propithecus coquereli), delicate leaf-eaters from the dry northwestern forests of Madagascar.
+
+```{r}
+file_name  = "sifka.xlsx"
+file_path <- here(data_folder, file_name)
+
+sifka <- read_excel(file_path) 
+
+sifka[3]<-as.numeric(unlist(sifka[3])) #make them numeric
+sifka[4]<-as.numeric(unlist(sifka[4])) #make them numeric
+
+glimpse(sifka)
+
+```
+
+Map
+```{r}
+leaflet(sifka)%>%
+  addTiles() %>%
+ # addProviderTiles(providers$Esri.WorldImagery) %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+```
+
+```{r}
+kable(head(sifka), digits = 1)
+
+unique(sifka$source)
+```
+
+
+```{r}
+getData("ISO3")%>%
+  as.data.frame%>%
+  filter(NAME=="Madagascar")
+
+za=getData('GADM', country='MDG', level=1)
+plot(za)
+```
+Varia	ble Description
+BIO1	Annual Mean Temperature
+BIO2	Mean Diurnal Range (Mean of monthly (max temp – min temp))
+BIO3	Isothermality (BIO2/BIO7) (* 100)
+BIO4	Temperature Seasonality (standard deviation *100)
+BIO5	Max Temperature of Warmest Month
+BIO6	Min Temperature of Coldest Month
+BIO7	Temperature Annual Range (BIO5-BIO6)
+BIO8	Mean Temperature of Wettest Quarter
+BIO9	Mean Temperature of Driest Quarter
+BIO10	Mean Temperature of Warmest Quarter
+BIO11	Mean Temperature of Coldest Quarter
+BIO12	Annual Precipitation
+BIO13	Precipitation of Wettest Month
+BIO14	Precipitation of Driest Month
+BIO15	Precipitation Seasonality (Coefficient of Variation)
+BIO16	Precipitation of Wettest Quarter
+BIO17	Precipitation of Driest Quarter
+BIO18	Precipitation of Warmest Quarter
+BIO19	Precipitation of Coldest Quarter
+
+```{r}
+
+clim=getData('worldclim', var='bio', res=10) 
+gain(clim)=0.1 #Temp converts back to degrees Celsius. Precip turns into cm.
+clim <- crop(clim, bbox(za))
+
+coordinates(sifka)= ~ long+ lat
+
+rasValue=extract(clim, sifka)
+
+combinePointValue=cbind(sifka,rasValue)
+write.table(combinePointValue,file="sifkaclim.csv", append=FALSE, sep= ",", row.names = FALSE, col.names=TRUE)
+
+```
+
+
+
+```{r}
+sessionInfo()
+```

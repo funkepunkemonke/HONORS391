@@ -1,0 +1,6 @@
+"0","```r
+coordinates(sifka)= ~ LONGITUDE+ LATITUDE
+
+```"
+"1","Error in eval(predvars, data, env) : object 'LONGITUDE' not found
+"

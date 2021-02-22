@@ -2953,14 +2953,11 @@ mydata &lt;- read.table(file = &#39;data/mydata.txt&#39;,    # file is in a data
 </div>
 <div id="reading-files-directly-from-a-web-url" class="section level3">
 <h3>Reading files directly from a web URL</h3>
-<p>A really neat feature of the <code>read.table()</code> function is that you can use it to load text files directly from the web (assuming you are online). To do this, just set the file path to the document’s web URL (beginning with <code>http://</code>). For example, I have a text file stored at <code>https://github.com/funkepunkemonke/HONORS391/blob/main/HF.data.2005.txt</code>. You can import and save this tab–delimited text file as a new object called <code>fromweb</code> as follows:</p>
+<p>A really neat feature of the <code>read.table()</code> function is that you can use it to load text files directly from the web (assuming you are online). To do this, just set the file path to the document’s web URL (beginning with <code>http://</code>). For example, I have a text file stored at <code>https://raw.githubusercontent.com/funkepunkemonke/HONORS391/main/HF.data.2005.txt</code>. You can import and save this tab–delimited text file as a new object called <code>fromweb</code> as follows:</p>
 <pre><code># Read a text file from the web
-fromweb &lt;- read.table(file = &#39;https://github.com/funkepunkemonke/HONORS391/blob/main/HF.data.2005.txt&#39;,
+fromweb &lt;- read.table(file = &#39;https://raw.githubusercontent.com/funkepunkemonke/HONORS391/main/HF.data.2005.txt&#39;,
                       sep = &#39;\t&#39;,
-                      header = TRUE)
-
-# Print the result
-fromweb</code></pre>
+                      header = TRUE)</code></pre>
 <p>I think this is pretty darn cool. This means you can save your main data files on Dropbox or a web-server, and always have access to it from any computer by accessing it from its web URL.</p>
 <div id="debugging" class="section level4 unnumbered">
 <h4>Debugging</h4>
