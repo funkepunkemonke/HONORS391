@@ -349,7 +349,7 @@ RStudio interface by navigating in the file browser where your working directory
 should be, and clicking on the blue gear icon "More", and select "Set As Working
 Directory". Alternatively you can use `setwd("/path/to/working/directory")` to
 reset your working directory. However, your scripts should not include this line
-because it will fail on someone else's computer.
+because it will fail on someone else's computer. Note the the use of regular slashes, this is a weirdness of R, since it's using simple blackslashes for specific instructions.
 
 ## Interacting with R
 
@@ -1498,4 +1498,694 @@ Choosing mateys is no laughing matter, lets see what we can offer as advice to o
 Save your file and answer the questions on Moodle. No need to email it to me.
 
 
+# Lesson 4: Managing and manipulating data
 
+In this lesson, we'll cover the basics of R object management. We'll cover how to load new objects like external datasets into R, how to manage the objects that you already have, and how to export objects from R into external files that you can share with other people or store for your own future use.
+
+## Workspace management functions
+
+Here are some functions for managing your workspace, working directory, and writing data from R as `.txt` or `.RData` files, and reading files into R that we'll go over in this lesson:
+
+| Code| Description| 
+|:------------------------|:----------------------------------|
+|`ls()`|Display all objects in the current workspace|
+|`rm(a, b, ..)`|Removes the objects `a`, `b`... from your workspace|
+|`rm(list = ls())`|Removes *all* objects in your workspace|
+|`getwd()`|Returns the current working directory |
+|`setwd(file = "dir)`|Changes the working directory to a specified file location |
+|`list.files()`|Returns the names of all files in the working directory |
+|`write.table(x, file = "mydata.txt", sep)`|writes the object `x` to a text file called `mydata.txt`. Define how the columns will be separated with `sep` (e.g.; `sep = ","` for a comma--separated file, and `sep = \t"` for a tab--separated file).|
+|`save(a, b, .., file = "myimage.RData)`|Saves objects `a`, `b`, ... to  `myimage.RData` |
+|`save.image(file = "myimage.RData")`|Saves *all* objects in your workspace to `myimage.RData`|
+|`load(file = "myimage.RData")`|Loads objects in the file `myimage.RData`|
+|`read.table(file = "mydata.txt", sep, header)`|Reads a text file called `mydata.txt`, define how columns are separated with `sep` (e.g. `sep = ","` for comma-delimited files, and `sep = "\t"` for tab-delimited files), and whether there is a header column with `header = TRUE`|
+
+
+
+### Why object and file management is so important
+
+Your computer is a maze of folders, files, and selfies. Outside of R, when you want to open a specific file, you probably open up an explorer window that allows you to visually search through the folders on your computer. Or, maybe you select recent files, or type the name of the file in a search box to let your computer do the searching for you. While this system usually works for non-programming tasks, it is a no-go for R. Why? Well, the main problem is that all of these methods require you to *visually* scan your folders and move your mouse to select folders and files that match what you are looking for. When you are programming in R, you need to specify *all* steps in your analyses in a way that can be easily replicated by others and your future self. This means you can't just say: "Find this one file I emailed to myself a week ago" or "Look for a file that looks something like `experimentAversion3.txt`." Instead, need to be able to write R code that tells R *exactly* where to find critical files -- either on your computer or on the web.
+
+To make this job easier, R uses *working directories*. 
+
+
+## The working directory
+
+The **working directory** is just a file path on your computer that sets the default location of any files you read into R, or save out of R. In other words, a working directory is like a little flag somewhere on your computer which is tied to a specific analysis project. If you ask R to import a dataset from a text file, or save a dataframe as a text file, it will assume that the file is inside of your working directory.
+
+You can only have one working directory active at any given time. The active working directory is called your *current* working directory.
+
+To see your current working directory, use `getwd()`:
+
+
+    # Print my current working directory
+    getwd()
+
+
+
+As you can see, when I run this code, it tells me that my working directory is in my documents folder at `C:/Users/funke/Documents`. This means that when I try to read new files into R, or write files out of R, it will assume that I want to put them in this folder.
+
+If you want to change your working directory, use the `setwd()` function. For example, if I wanted to change my working directory to an existing  folder called `yarrr`, I'd run the following code:
+
+
+    # Change my working directory to the following path
+    setwd(dir = "C:/Users/funke/Documents/yarrr")
+
+
+## Projects in RStudio
+
+If you're using RStudio, you have the option of creating a new R **project**. A project is simply a working directory designated with a `.RProj` file. When you open a project (using File/Open Project in RStudio or by double--clicking on the .Rproj file outside of R), the working directory will automatically be set to the directory that the `.RProj` file is located in. 
+
+I recommend creating a new R Project whenever you are starting a new research project. Once you've created a new R project, you should immediately create folders in the directory which will contain your R code, data files, notes, and other material relevant to your project (you can do this outside of R on your computer, or in the Files window of RStudio). For example, you could create a folder called `R` that contains all of your R code, a folder called `data` that contains all your data (etc.). We did this in lesson 1, right?!?!?
+
+
+## The workspace
+
+The **workspace** (aka your **working environment**) represents all of the objects and functions you have either defined in the current session, or have loaded from a previous session. When you started RStudio for the first time, the working environment was empty because you hadn't created any new objects or functions. However, as you defined new objects and functions using the assignment operator `<-`, these new objects were stored in your working environment. When you closed RStudio after defining new objects, you likely got a message asking you "Save workspace image...?"" This is RStudio's way of asking you if you want to save all the objects currently defined in your workspace as an **image file** on your computer. 
+
+
+### ls()
+
+If you want to see all the objects defined in your current workspace, use the `ls()` function.
+
+    # Print all the objects in my workspace
+    ls()
+
+
+## .RData files
+
+The best way to store objects from R is with `.RData files`. `.RData` files are specific to R and can store as many objects as you'd like within a single file. Think about that. If you are conducting an analysis with 10 different dataframes and 5 hypothesis tests, you can save **all** of those objects in a single file called `ExperimentResults.RData`. 
+
+### save()
+
+
+To save selected objects into one `.RData` file, use the `save()` function. When you run the `save()` function with specific objects as arguments, (like `save(a, b, c, file = "myobjects.RData"`) all of those objects will be saved in a single file called `myobjects.RData`
+
+For example, let's create a few objects corresponding to a study.
+
+
+    # Create some objects that we'll save later
+    study1.df <- data.frame(id = 1:5, 
+                            sex = c("m", "m", "f", "f", "m"), 
+                            score = c(51, 20, 67, 52, 42))
+    
+    score.by.sex <- aggregate(score ~ sex, 
+                              FUN = mean, 
+                              data = study1.df)
+    
+    study1.htest <- t.test(score ~ sex, 
+                           data = study1.df)
+
+    
+    
+Now that we've done all of this work, we want to save all three objects in an a file called `study1.RData` in the data folder of my current working directory. To do this, you can run the following
+    
+
+    # Save two objects as a new .RData file
+    #   in the data folder of my current working directory
+    save(study1.df, score.by.sex, study1.htest,
+         file = "data/study1.RData")
+
+
+Once you do this, you should see the `study1.RData` file in the data folder of your working directory. This file now contains all of your objects that you can easily access later using the `load()` function (we'll go over this in a second...).
+
+
+### save.image()
+
+
+If you have many objects that you want to save, then using `save` can be tedious as you'd have to type the name of every object. To save *all* the objects in your workspace as a .RData file, use the `save.image()` function. For example, to save my workspace in the `data` folder located in my working directory, I'd run the following:
+
+
+    # Save my workspace to complete_image.RData in th,e
+    #  data folder of my working directory
+    save.image(file = "data/projectimage.RData")
+
+
+Now, the `projectimage.RData` file contains *all* objects in your current workspace.
+
+### load()
+
+
+To load an `.RData` file, that is, to import all of the objects contained in the `.RData` file into your current workspace, use the `load()` function.  For example, to load the three specific objects that I saved earlier (`study1.df`, `score.by.sex`, and `study1.htest`) in `study1.RData`, I'd run the following:
+
+
+    # Load objects in study1.RData into my workspace
+    load(file = "data/study1.RData")
+
+
+To load all of the objects in the workspace that I just saved to the data folder in my working directory in `projectimage.RData`, I'd run the following:
+
+
+    # Load objects in projectimage.RData into my workspace
+    load(file = "data/projectimage.RData")
+
+
+I hope you realize how awesome loading .RData files is. With R, you can store all of your objects, from dataframes to hypothesis tests, in a single `.RData` file. And then load them into any R session at any time using `load()`.
+
+### rm()
+
+
+To remove objects from your workspace, use the `rm()` function. Why would you want to remove objects? At some points in your analyses, you may find that your workspace is filled up with one or more objects that you don't need -- either because they're slowing down your computer, or because they're just distracting. 
+
+To remove specific objects, enter the objects as arguments to `rm()`. For example, to remove a huge dataframe called `huge.df`, I'd run the following;
+
+    # Remove huge.df from workspace
+    rm(huge.df)
+
+
+If you want to remove *all* of the objects in your working directory, enter the argument `list = ls()`
+
+    # Remove ALL objects from workspace
+    rm(list = ls())
+
+**Important!!!** Once you remove an object, you **cannot** get it back without running the code that originally generated the object! That is, you can't simply click 'Undo' to get an object back. Thankfully, if your R code is complete and well-documented, you should easily be able to either re-create a lost object (e.g.; the results of a regression analysis), or re-load it from an external file.
+
+## .txt files
+
+
+While `.RData` files are great for saving R objects, sometimes you'll want to export data (usually dataframes) as a simple `.txt` text file that other programs, like Excel can also read. To do this, use the `write.table()` function.
+
+### write.table()
+
+Arguments for the `write.table()` function that will save an object x (usually a data frame) as a .txt file.
+
+
+| Argument| Description| 
+|:------------|:-------------------------------------------------|
+|`x`|The object you want to write to a text file, usually a dataframe|
+|`file`| The document's file path relative to the working directory unless specified otherwise. For example `file = "mydata.txt"` saves the text file directly in the working directory, while `file = "data/mydata.txt"` will save the data in an existing folder called `data` inside the working directory.<br>You can also specify a full file path outside of your working directory (`file = "/Users/CaptainJack/Desktop/OctoberStudy/mydata.txt"`) |
+|`sep`| A string indicating how the columns are separated. For comma separated files, use `sep = ","`, for tab--delimited files, use `sep = "\t"`|
+|`row.names`| A logical value (TRUE or FALSE) indicating whether or not save the rownames in the text file. (`row.names = FALSE` will not include row names) |
+
+
+For example, the following code will save the `pirates` dataframe as a tab--delimited text file called `pirates.txt` in my working directory:
+
+
+    # Write the pirates dataframe object to a tab-delimited
+    #  text file called pirates.txt in my working directory
+    
+    write.table(x = pirates,
+                file = "pirates.txt",  # Save the file as pirates.txt
+                sep = "\t")            # Make the columns tab-delimited
+
+Setting the argument "sep" to "," allows us to create a comma separated file that will easily be read in Excel. For a wrapper function dedicated to CSV files, you can also check "write.csv()".
+
+If you want to save a file to a location outside of your working directory, just use the entire directory name. When you enter a long path name into the `file` argument of `write.table()`, R will look for that directory outside of your working directory. For example, to save a text file to my Desktop (which is outside of my working directory), I would set `file = "Users/funke/Desktop/pirates.txt"`. 
+
+    
+    # Write the pirates dataframe object to a tab-delimited
+    #  text file called pirates.txt to my desktop
+    
+    write.table(x = pirates,
+                file = "Users/funke/Desktop/pirates.txt",  # Save the file as pirates.txt to my desktop
+                sep = "\t")                                    # Make the columns tab-delimited
+
+
+
+
+### read.table()
+
+You can import tables with the help of the function `read.table()`. If you have a .txt file that you want to read into R, use the `read.table()` function. With a couple of well thought arguments, it's easier than stealing candy from a baby! (But, why would you do that? Are you such a bad person that you would steal candy from a baby? Pirates are good.). You just need to specify the location of the file you want to open. You can even specify if there are column headers in your file, what is the character, series of characters separating each value, or even the type of decimal point (useful when you move to another country!).
+
+| Argument| Description| 
+|:------------|:-------------------------------------------------|
+|`file`| The document's file path relative to the working directory unless specified otherwise. For example `file = "mydata.txt"` looks for the text file directly in the working directory, while `file = "data/mydata.txt"` will look for the file in an existing folder called `data` inside the working directory.<br>If the file is outside of your working directory, you can also specify a full file path (`file = "/Users/CaptainJack/Desktop/OctoberStudy/mydata.txt"`) |
+|`header`|  A logical value indicating whether the data has a header row -- that is, whether the first row of the data represents the column names.|
+|`sep`|  A string indicating how the columns are separated. For comma separated files, use `sep = ","`, for tab--delimited files, use `sep = "\t"` |
+|`stringsAsFactors`|  A logical value indicating whether or not to convert strings to factors. I **always** set this to FALSE because I *hate*, *hate*, *hate* how R uses factors|
+
+
+The three critical arguments to `read.table()` are `file`, `sep`, `header` and `stringsAsFactors`. The `file` argument is a character value telling R where to find the file. If the file is in a folder in your working directory, just specify the path within your working directory (e.g.; `file = data/newdata.txt`. The `sep` argument tells R how the columns are separated in the file (again, for a comma--separated file, use `sep = ","`}, for a tab--delimited file, use `sep = "\t"`. The `header` argument is a logical value (TRUE or FALSE) telling R whether or not the first row in the data is the name of the data columns. Finally, the `stringsAsFactors` argument is a logical value indicating whether or not to convert strings to factors (I *always* set this to FALSE!)
+
+Let's test this function out by reading in a text file titled `mydata.txt`. Since the text file is located a folder called `data` in my working directory, I'll use the file path `file = "data/mydata.txt"` and since the file is tab--delimited, I'll use the argument `sep = "\t"`:
+
+
+    # Read a tab-delimited text file called mydata.txt 
+    #  from the data folder in my working directory into
+    #  R and store as a new object called mydata
+    
+    mydata <- read.table(file = 'data/mydata.txt',    # file is in a data folder in my working directory
+                         sep = '\t',                  # file is tab--delimited
+                         header = TRUE,               # the first row of the data is a header row
+                         stringsAsFactors = FALSE)    # do NOT convert strings to factors!!
+
+
+
+### Reading files directly from a web URL
+
+A really neat feature of the `read.table()` function is that you can use it to load text files directly from the web (assuming you are online). To do this, just set the file path to the document's web URL (beginning with `http://`). For example, I have a text file stored at `https://github.com/funkepunkemonke/HONORS391/blob/main/HF.data.2005.txt`. You can import and save this tab--delimited text file as a new object called `fromweb` as follows:
+
+
+    # Read a text file from the web
+    fromweb <- read.table(file = 'https://github.com/funkepunkemonke/HONORS391/blob/main/HF.data.2005.txt',
+                          sep = '\t',
+                          header = TRUE)
+    
+    # Print the result
+    fromweb
+
+
+
+I think this is pretty darn cool. This means you can save your main data files on Dropbox or a web-server, and always have access to it from any computer by accessing it from its web URL.
+
+
+#### Debugging {-}
+
+When you run `read.table()`, you might receive an error like this:
+
+<div class="error">Error in file(file, "rt") : cannot open the connection</div>
+<div class="error">In addition: Warning message:</div>
+<div class="error">In file(file, "rt") : cannot open file 'asdf': No such file or directory</div>
+
+If you receive this error, it's likely because you either spelled the file name incorrectly, or did not specify the correct directory location in the `file` argument.
+
+## Additional tips
+
+1. There are many functions other than `read.table()` for importing data. For example, the functions `read.csv` and `read.delim` are specific for importing comma-separated and tab-separated text files. In practice, these functions do the same thing as `read.table`, but they don't require you to specify a `sep` argument.
+
+
+## Manuipulating Data
+we'll cover some more advanced functions and procedures for manipulating dataframes. 
+
+You learned how to calculate statistics on subsets of data using indexing. However, you may have noticed that indexing is not very intuitive and not terribly efficient. If you want to calculate statistics for many different subsets of data (e.g.; mean birth rate for every country), you'd have to write a new indexing command for each subset, which could take forever. Thankfully, R has some great built-in functions like `aggregate()` that allow you to easily apply functions (like `mean()`) to a dependent variable (like birth rate) for each level of one or more independent variables (like a country) with just a few lines of code.
+
+
+## `order()`: Sorting data
+
+To sort the rows of a dataframe according to column values, use the `order()` function. The `order()` function takes one or more vectors as arguments, and returns an integer vector indicating the order of the vectors. You can use the output of `order()` to index a dataframe, and thus change its order.
+
+Let's re-order the `pirates` data by height from the shortest to the tallest:
+
+
+    # Sort the pirates dataframe by height
+    pirates <- pirates[order(pirates$height),]
+    
+    # Look at the first few rows and columns of the result
+    pirates[1:5, 1:4]
+
+
+
+By default, the `order()` function will sort values in ascending (increasing) order. If you want to order the values in descending (decreasing) order, just add the argument `decreasing = TRUE` to the `order()` function:
+
+
+    # Sort the pirates dataframe by height in decreasing order
+    pirates <- pirates[order(pirates$height, decreasing = TRUE),]
+    
+    # Look at the first few rows and columns of the result
+    pirates[1:5, 1:4]
+
+
+To order a dataframe by several columns, just add additional arguments to `order()`. For example, to order the `pirates` by sex and then by height, we'd do the following:
+
+
+    # Sort the pirates dataframe by sex and then height
+    pirates <- pirates[order(pirates$sex, pirates$height),]
+
+
+
+By default, the `order()` function will sort values in ascending (increasing) order. If you want to order the values in descending (decreasing) order, just add the argument `decreasing = TRUE` to the `order()` function:
+
+
+    # Sort the pirates dataframe by height in decreasing order
+    pirates <- pirates[order(pirates$height, decreasing = TRUE),]
+
+
+
+## `merge()`: Combining data
+
+
+| Argument| Description| 
+|:------------|:-------------------------------------------------|
+|`x, y`| Two dataframes to be merged|
+|`by`| A string vector of 1 or more columns to match the data by. For example, `by = "id"` will combine columns that have matching values in a column called `"id"`. `by = c("last.name", "first.name")` will combine columns that have matching values in both `"last.name"` and `"first.name"`|
+|`all`| A logical value indicating whether or not to include rows with non-matching values of `by`. |
+
+One of the most common data management tasks is **merging** (aka combining) two data sets together. For example, imagine you conduct a study where 5 participants are given a score from 1 to 5 on a risk assessment task. We can represent these data in a dataframe called `risk.survey`:
+
+
+    # Results from a risk survey
+    risk.survey <- data.frame(
+      "participant" = c(1, 2, 3, 4, 5),
+      "risk.score" = c(3, 4, 5, 3, 1))
+
+
+
+Now, imagine that in a second study, you have participants complete a survey about their level of happiness (on a scale of 0 to 100). We can represent these data in a new dataframe called `happiness.survey`:
+
+
+    happiness.survey <- data.frame(
+      "participant" = c(4, 2, 5, 1, 3),
+      "happiness.score" = c(20, 40, 50, 90, 53))
+
+
+Now, we'd like to combine these data into one data frame so that the two survey scores for each participant are contained in one object. To do this, use `merge()`.
+
+
+When you merge two dataframes, the result is a new dataframe that contains data from both dataframes. The key argument in `merge()` is `by`. The `by` argument specifies how rows should be matched during the merge. Usually, this will be something like an name, id number, or some other unique identifier.
+
+Let's combine our risk and happiness survey using `merge()`. Because we want to match rows by the `participant.id` column, we'll specify `by = "participant.id"`. Additionally, because we want to include rows with potentially non-matching values, we'll include `all = TRUE`
+
+    
+    # Combine the risk and happiness surveys by matching participant.id
+    combined.survey <- merge(x = risk.survey,
+                             y = happiness.survey,
+                             by = "participant",
+                             all = TRUE)
+    
+    # Print the result
+    combined.survey
+
+
+For the rest of the lesson, we'll cover data aggregation functions. These functions allow you to quickly and easily calculate aggregated summary statistics over groups of data in a data frame. For example, you can use them to answer questions such as "What was the mean crew age for each ship?", or "What percentage of participants completed an attention check for each study condition?" We'll start by going over the `aggregate()` function.
+
+## `aggregate()`: Grouped aggregation
+
+| Argument| Description| 
+|:------------|:-------------------------------------------------|
+|`formula`| A formula in the form `y ~ x1 + x2 + ...` where y is the dependent variable, and x1, x2... are the independent variables. For example, `salary ~ sex + age` will aggregate a `salary` column at every unique combination of `sex` and `age`|
+|`FUN`| A function that you want to apply to y at every level of the independent variables. E.g.; `mean`, or `max`.|
+|`data`| The dataframe containing the variables in `formula`|
+|`subset`| A subset of data to analyze. For example, `subset(sex == "f" & age > 20)` would restrict the analysis to females older than 20. You can ignore this argument to use all data.|
+
+
+The first aggregation function we'll cover is `aggregate()`. Aggregate allows you to easily answer questions in the form: "What is the value of the function `FUN` applied to a dependent variable `dv` at each level of one (or more) independent variable(s) `iv`?
+
+
+    # General structure of aggregate()
+    aggregate(formula = dv ~ iv, # dv is the data, iv is the group 
+              FUN = fun, # The function you want to apply
+              data = df) # The dataframe object containing dv and iv
+
+
+Let's give `aggregate()` a whirl. No...not a whirl...we'll give it a spin. Definitely a spin. We'll use `aggregate()` on the `ChickWeight` dataset (it's built in to R) to answer the question "What is the mean weight for each diet?" 
+
+If we wanted to answer this question using basic R functions, we'd have to write a separate command for each supplement like this:
+
+
+    # The WRONG way to do grouped aggregation. 
+    #  We should be using aggregate() instead!
+    mean(ChickWeight$weight[ChickWeight$Diet == 1])
+    mean(ChickWeight$weight[ChickWeight$Diet == 2])
+    mean(ChickWeight$weight[ChickWeight$Diet == 3])
+    mean(ChickWeight$weight[ChickWeight$Diet == 4])
+
+
+Be lazy. Go ahead, be lazy! R is perfect for that. Yes, be lazy, but be smart about it! Nobody wants to write 12 lines of code if you can get away with one. Let me provide some context.
+
+If you are ever writing code like this, there is almost always a simpler way to do it. Let's replace this code with a much more elegant solution using `aggregate()`.For this question, we'll set the value of the dependent variable Y to `weight`, x1 to `Diet`, and FUN to `mean`
+
+
+    # Calculate the mean weight for each value of Diet
+    aggregate(formula = weight ~ Diet,  # DV is weight, IV is Diet
+              FUN = mean,               # Calculate the mean of each group
+              data = ChickWeight)       # dataframe is ChickWeight
+
+
+As you can see, the `aggregate()` function has returned a dataframe with a column for the independent variable `Diet`, and a column for the results of the function `mean` applied to each level of the independent variable. The result of this function is the same thing we'd got from manually indexing each level of `Diet` individually -- but of course, this code is much simpler and more elegant!
+
+You can also include a `subset` argument within an `aggregate()` function to apply the function to subsets of the original data. For example, if I wanted to calculate the mean chicken weights for each diet, but only when the chicks are less than 10 weeks old, I would do the following:
+
+
+
+    # Calculate the mean weight for each value of Diet,
+    #  But only when chicks are less than 10 weeks old
+    
+    aggregate(formula = weight ~ Diet,  # DV is weight, IV is Diet
+              FUN = mean,               # Calculate the mean of each group
+              subset = Time < 10,       # Only when Chicks are less than 10 weeks old
+              data = ChickWeight)       # dataframe is ChickWeight
+
+
+
+You can also include multiple independent variables in the formula argument to `aggregate()`. For example, let's use `aggregate()` to now get the mean weight of the chicks for all combinations of both `Diet` and `Time`, but now only for weeks 0, 2, and 4:
+
+
+
+    # Calculate the mean weight for each value of Diet and Time,
+    #  But only when chicks are 0, 2 or 4 weeks okd
+    
+    aggregate(formula = weight ~ Diet + Time,  # DV is weight, IVs are Diet and Time
+              FUN = mean,                      # Calculate the mean of each group
+              subset = Time %in% c(0, 2, 4),   # Only when Chicks are 0, 2, and 4 weeks old
+              data = ChickWeight)              # dataframe is ChickWeight
+
+
+## Manipulating and analyzing data with `dplyr`
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read, especially for complicated operations. Enter `dplyr`. `dplyr` is a package for making tabular data manipulation easier. It pairs nicely with `tidyr` which enables you to swiftly convert between different data formats for plotting and analysis.
+
+In this section, we'll go over a very brief overview of how you can use dplyr to easily do grouped aggregation. Just to be clear - you can use dplyr to do everything the `aggregate()` function does and much more! However, this will be a very brief overview and I strongly recommend you look at the help menu for dplyr for additional descriptions and examples.
+
+The `tidyverse` package is an "umbrella-package" that installs `tidyr`, `dplyr`, and several other packages useful for data analysis, such as `ggplot2`, `tibble`, etc.
+
+The `tidyverse` package tries to address 3 common issues that arise when doing data analysis with some of the functions that come with R:
+
+1. The results from a base R function sometimes depend on the type of data.
+2. Using R expressions in a non standard way, which can be confusing for new learners.
+3. Hidden arguments, having default operations that new learners are not aware of.
+
+
+    install.packages("tidyverse")     
+    library("tidyverse")   
+
+
+The package `dplyr` provides easy tools for the most common data manipulation tasks. It is built to work directly with data frames, with many common tasks optimized by being written in a compiled language (C++). An additional feature is the ability to work directly with data stored in an external database. The benefits of doing this are that the data can be managed natively in a relational database, queries can be conducted on that database, and only the results of the query are returned.
+
+This addresses a common problem with R in that all operations are conducted in-memory and thus the amount of data you can work with is limited by available memory. The database connections essentially remove that limitation in that you can connect to a database of many hundreds of GB, conduct queries on it directly, and pull back into R only what you need for analysis.
+
+The package `tidyr` addresses the common problem of wanting to reshape your data for plotting and use by different R functions. Sometimes we want data sets where we have one row per measurement. Sometimes we want a data frame where each measurement type has its own column, and rows are instead more aggregated groups (e.g., a time period, an experimental unit like a plot or a batch number). Moving back and forth between these formats is non-trivial, and `tidyr` gives you tools for this and more sophisticated data manipulation.
+
+To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want to check out this
+[handy data transformation with **`dplyr`** cheatsheet](https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf)
+and this [one about **`tidyr`**](https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf).
+
+
+Programming with dplyr looks a lot different than programming in standard R. dplyr works by combining objects (dataframes and columns in dataframes), functions (mean, median, etc.), and **verbs** (special commands in `dplyr`). In between these commands is a new operator called the **pipe** which looks like this: `%>%`}. The pipe simply tells R that you want to continue executing some functions or verbs on the object you are working on. You can think about this pipe as meaning 'and then...' Pipes are made available via the **`magrittr`** package, installed automatically
+with **`dplyr`**. If you use RStudio, you can type the pipe with <kbd>Ctrl</kbd>
++ <kbd>Shift</kbd> + <kbd>M</kbd> if you have a PC or <kbd>Cmd</kbd> + 
+<kbd>Shift</kbd> + <kbd>M</kbd> if you have a Mac.
+
+To aggregate data with `dplyr`, your code will look something like the following code. In this example, assume that the dataframe you want to summarize is called `my.df`, the variable you want to group the data by independent variables `iv1, iv2`, and the columns you want to aggregate are called `col.a`, `col.b` and `col.c`
+
+
+    # Template for using dplyr
+    my.df %>%                  # Specify original dataframe
+      filter(iv3 > 30) %>%     # Filter condition
+      group_by(iv1, iv2) %>%   # Grouping variable(s)
+      summarise(
+        a = mean(col.a),       # calculate mean of column col.a in my.df
+        b = sd(col.b),         # calculate sd of column col.b in my.df
+        c = max(col.c))        # calculate max on column col.c in my.df, ...
+
+
+
+When you use dplyr, you write code that sounds like: "The original dataframe is XXX, now filter the dataframe to only include rows that satisfy the conditions YYY, now group the data at each level of the variable(s) ZZZ, now summarize the data and calculate summary functions XXX..."
+
+Let's start with an example: Let's create a dataframe of aggregated data from the `pirates` dataset. I'll filter the data to only include pirates who wear a headband. I'll  group the data according to the columns `sex` and `college`. I'll then create several columns of different summary statistic of some data across each grouping. To create this aggregated data frame, I will use the new function `group_by` and the verb `summarise`. I will assign the result to a new dataframe called `pirates.agg`:
+
+
+    pirates.agg <- pirates %>%                   # Start with the pirates dataframe
+                   filter(headband == "yes") %>% # Only pirates that wear hb
+                   group_by(sex, college) %>%    # Group by these variables
+                   summarise( 
+                            age.mean = mean(age),      # Define first summary...
+                            tat.med = median(tattoos), # you get the idea...
+                            n = n()                    # How many are in each group?
+                   ) # End
+    
+    # Print the result
+    pirates.agg
+
+
+
+
+As you can see from the output on the right, our final object `pirates.agg` is the aggregated dataframe we want which aggregates all the columns we wanted for each combination of `sex` and `college` One key new function here is `n()`. This function is specific to dplyr and returns a frequency of values in a summary command.
+
+Let's do a more complex example where we combine multiple verbs into one chunk of code. We'll aggregate data from the movies dataframe.
+
+
+    movies %>% # From the movies dataframe...
+        filter(genre != "Horror" & time > 50) %>% # Select only these rows
+        group_by(rating, sequel) %>% # Group by rating and sequel
+        summarise( #
+          frequency = n(), # How many movies in each group?
+          budget.mean = mean(budget, na.rm = T),  # Mean budget?
+          revenue.mean = mean(revenue.all), # Mean revenue?
+          billion.p = mean(revenue.all > 1000)) # Percent of movies with revenue > 1000?
+
+
+
+As you can see, our result is a dataframe with 14 rows and 6 columns. The data are summarized from the movie dataframe, only include values where the genre is *not* Horror and the movie length is longer than 50 minutes, is grouped by rating and sequel, and shows several summary statistics.
+
+### Additional dplyr help
+
+We've only scratched the surface of what you can do with `dplyr`. In fact, you can perform almost all of your R tasks, from loading, to managing, to saving data, in the `dplyr` framework. For more tips on using dplyr, check out the dplyr vignette at [https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html).
+
+
+There is also a very nice YouTube video covering `dplyr` at [https://goo.gl/UY2AE1](https://goo.gl/UY2AE1). Finally, consider also reading [R for Data Science](http://r4ds.had.co.nz/) written by Garrett Grolemund and Hadley Wickham, which teaches R from the ground-up using the dplyr framework.
+
+
+## Additional aggregation functions
+
+There are many, many other aggregation functions that I haven't covered in this lesson -- mainly because I rarely use them. In fact, that's a good reminder of a peculiarity about R, there are many methods to achieve the same result, and your choice of which method to use will often come down to which method you just like the most.
+
+### `rowMeans()`, `colMeans()`
+
+
+To easily calculate means (or sums) across all rows or columns in a matrix or dataframe, use `rowMeans()`, `colMeans()`, `rowSums()` or `colSums()`. 
+
+For example, imagine we have the following data frame representing scores from a quiz with 5 questions, where each row represents a student, and each column represents a question. Each value can be either 1 (correct) or 0 (incorrect)
+
+
+    exam <- data.frame("q1" = c(1, 0, 0, 0, 0),
+                       "q2" = c(1, 0, 1, 1, 0),
+                       "q3" = c(1, 0, 1, 0, 0),
+                       "q4" = c(1, 1, 1, 1, 1),
+                       "q5" = c(1, 0, 0, 1, 1))
+
+
+
+Let's use `rowMeans()` to get the average scores for each student:
+
+
+    # What percent did each student get correct?
+    rowMeans(exam)
+
+
+Now let's use `colMeans()` to get the average scores for each *question*:
+
+
+    # What percent of students got each question correct?
+    colMeans(exam)
+
+
+**Warning** `rowMeans()` and `colMeans()` only work on numeric columns. If you try to apply them to non-numeric data, you'll receive an error.
+
+### `apply` family
+
+There is an entire class of `apply` functions in R that apply functions to groups of data. For example, `tapply()`, `sapply()` and `lapply()` each work very similarly to `aggregate()`. For example, you can calculate the average length of movies by genre with `tapply()` as follows. 
+
+
+    with(movies, tapply(X = time,        # DV is time
+                        INDEX = genre,   # IV is genre
+                        FUN = mean,      # function is mean
+                        na.rm = TRUE))   # Ignore missing
+
+
+Basically, what I'm trying to say is that if you have to repeat the same operation on an R object, you just have to `apply()` yourself. What's that? This looks like a function? Why, yes, it does. Using the set of functions `apply()`, `lapply()` and `tapply()`, you'll be able to do exactly this. More specifically, `apply()` lets you 'apply' a function repeatedly over the different dimensions of an array/matrix, and `lapply()` will do this for each element of a list. On the other hand,` tapply()` will apply a function based on the levels of a specified factor (or set of). For each, you just have to specify which object to work on, which operation/function you want to apply, and if necessary the way to do it (i.e. over which dimension or factor).
+
+Mastering these functions can seem intimidating at first, but prove to be useful in the long term. And what? You're now a brave R coder. A simple string of characters can't scare you anymore! Go, apply yourself, and conquer the world!
+
+## Assignment 4
+
+### Examples
+
+    library(yarrr) # Load yarrr for the pirates dataframe
+    library(dplyr) # Load dplyr for aggregation
+    
+    # Start by creating a project with File -- New Project.
+    # put the project in the working directory you want on your computer.
+    # Then, create a folder called "data" in that working directory
+    #   by clicking "New Folder" in the File window in RStudio
+    
+    # Print my current working directory (this is where you put your project)
+    getwd()
+    
+    # Save the pirates dataframe to a tab--delimited txt file called pirates.txt in the data folder of my working directory
+    
+    write.table(x = pirates,                 # Object to save to a table    
+                file = "data/pirates.txt",   # Location and name of the text file to save
+                sep = "\t")                  # Separate columns with tabs
+    
+    # For fun, read the pirates.txt file into R and save as a new dataframe object called pirates2
+    
+    pirates2 <- read.table(file = "data/pirates.txt",   # Location of file
+                           header = TRUE,               # There IS a header row
+                           stringsAsFactors = FALSE)    # Do NOT convert strings to factors
+    
+    # Grouped Aggregation
+    
+    # Q: What is the mean age of pirates of different sexes?
+    
+    # Using aggregate()
+    aggregate(formula = age ~ sex,   # DV is age, IV is sex
+              data = pirates,        # Variables are in the pirates dataframe
+              FUN = mean)            # Calculate means
+    
+    # Using dplyr
+    pirates %>%           # Start with the pirates dataframe ..AND THEN...
+      group_by(sex) %>%   # Group the data by sex ..AND THEN...
+      summarise(          # Calculate summary statistics....
+        N = n(),               # Number of cases in each group
+        age_mean = mean(age)   # Mean age
+      )
+    
+    # Q: ONLY for male pirates, what is the median number of tattoos of pirates who do and do not wear headbands, and for different sexes?
+    
+    # Using aggregate()
+    aggregate(formula = tattoos ~ headband + sex,   # DV is tattoos, IVs are headband and sex
+              data = pirates,                       # Variables are in the pirates dataframe
+              subset = sex == "male",               # Only male pirates
+              FUN = median)                         # Calculate medians
+    
+    # Using dplyr
+    pirates %>%                    # Start with the pirates dataframe ..AND THEN...
+      filter(sex == "male") %>%       # Only include male pirates ..AND THEN..
+      group_by(headband, sex) %>%  # Group the data by headband and sex ..AND THEN...
+      summarise(                   # Calculate summary statistics....
+        N = n(),                          # Number of cases in each group
+        tattoos_median = median(tattoos)  # Median number of tattoos
+      )
+    
+    
+    # Q: For each combination of sex and eyepatch, calculate the mean age, median height, mean weight, mean number of tattoos..
+    #      minimum sword.time, AND the percentage of pirates whose favorite pixar movie is "Monsters University".
+    #    Save the result as a dataframe called pirates_agg
+    
+    pirates_agg <- pirates %>%
+                    group_by(sex, eyepatch) %>%
+                    summarise(
+                      N = n(), # Number of cases in each group
+                      age_mean = mean(age),
+                      height_median = median(height),
+                      weight_mean = mean(weight),
+                      tattoos_mean = mean(tattoos),
+                      sword_min = min(sword.time),
+                      love_MU = mean(fav.pixar == "Monsters University")
+                    )
+    
+    # Save pirates and pirates_agg objects in an .RData file called pirates.RData in the data folder of my working directory
+    
+    save(pirates, pirates_agg, 
+         file = "data/pirates.RData")
+         
+         
+### Why do we overestimate others' willingness to pay?
+In this WPA, we will analyze data from Matthews et al. (2016): Why do we overestimate others' willingness to pay? The purpose of this research was to test if our beliefs about other people's affluence (i.e.; wealth) affect how much we think they will be willing to pay for items. You can find the full paper at http://journal.sjdm.org/15/15909/jdm15909.pdf.
+
+1. At the top of your script load the dplyr package using library()
+
+2. Using getwd() print the current working directory of your project. This is the directory on your computer where your project is located.
+
+3. Now it's time to load the data. The data for this WPA are stored at http://journal.sjdm.org/15/15909/data1.csv. Load the data into R by using read.table() into a new object called matthews by running the following code. Once you have done this, kook at the first few rows of matthews using head(), and str() to make sure the data were loaded correctly into R.
+
+4. Now that you've loaded the data into R, let's save a local copy of the data as a text file called matthews.txt into your data folder. Using write.table(), save the data as a tab-delimited text file called matthews.txt 
+
+5. What are the names of the data columns?
+
+6. What was the mean age?
+
+7. Currently the column gender is coded as 1 (male) and 2 (female). Let's create a new character column called gender_a that codes the data as "male" and "female" (instead of 1 and 2).
+
+8. Using `aggregate()` calculate the mean age of male and female participants
+
+9. Now use dplyr to do the same calculations using the following template. Do you get the same answers as before?
+
+    matthews %>%
+    group_by(__) %>%
+    summarise(
+      N = n(),
+      age_mean = mean(__)
+    )
+    
+10. The variable pcmore reflects the question: "What percent of people taking part in this survey do you think earn more than you do?". Using aggregate(), calculate the median value of this variable separately for each level of income. What does the result tell you?
