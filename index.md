@@ -452,7 +452,7 @@ Many packages also have websites with additional help, tutorials, news and more
 
 ### Dealing with error messages
 
-Don't get discouraged if your code doesn't run immediately! Error messages are
+Don't get discouraged if your code doesn't run immediately! Error messages are 
 common when programming, and fixing errors is part of any programmers daily
 work. Often, the problem is a small typo in a variable name or a missing
 parenthesis. Watch for the red x's next to your code in Rstudio. These may
@@ -2534,6 +2534,20 @@ Now, let's test our function with the optional inputs `main`, `xlab`, and `col`.
 
  As you can see, R has passed our optional plotting arguments down to the main `hist()` function in the function code.
  
+## Functions And Functional Programming in R
+How could you end this post without mentioning the crucial facts that R is a functional programming language?
+
+Yes, you read it right, though people usually associate the ‘functional’ attribute to popular languages like Scala. You can do anything with functions that you can do with vectors: you can assign them to variables, store them in lists, pass them as arguments to other functions, create them inside functions, and even return them as the result of a function.
+ 
 ## Assignment 5
 
+Here is your fifth Weekly Programming Assignment (WPA)!
+    
+### R you functional?
+Write a function called feed.me() that takes a string food as an argument, and prints the sentence “I love to eat food”.
 
+Try your function by running feed.me("apples"), it should return Yum! I love to eat apples.
+
+Now adjust your feed.me() function so that if the user specifies “avocados”, then the function returns “NOOOOO, I HATE AVACADOS!”
+
+There is no deliverable and no quiz this week!
