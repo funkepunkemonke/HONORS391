@@ -2187,3 +2187,353 @@ matthews %>%
 ```
 
 10. The variable pcmore reflects the question: "What percent of people taking part in this survey do you think earn more than you do?". Using aggregate(), calculate the median value of this variable separately for each level of income. What does the result tell you?
+
+# Lesson 5: Functions
+Yeah! One of the best features of R! Functions!
+
+Work in R lies on two things: *objects* and *functions*. Objects, as you already know, are “boxes“. They are the elements containing other things (those other things being what we are interested in). Most of the time, those boxes contain data. Functions are small (or incredibly huge) factories that will take the box you input them with and do something with it. Modify it, create something from it, simply read it, etc. Of course, functions have to be contained somewhere. And therefore, functions are also technically objects. But the fact that they can take an object and do something with it makes them special.
+
+Throughout this semester, you have been using tons of functions either built into base-R -- like `mean()`, `hist()`, `t.test()`, or written by other people and saved in packages -- like `pirateplot()` and `apa()` in the `yarrr` package. However, because R is a complete programming language, you can easily write your *own* functions that perform specific tasks you want.
+
+## The structure of a custom function
+
+You can write a function to do *anything* that you can program in R. Just think about a function as a container for R-code stored behind the scenes for you to use without having to see (or write) the code again. Now, if there's anything you like to do repeatedly in R (like making multiple customized plots, you can define the code just once in a new function rather than having to write it all again and again.Some of you reading this will quickly see how how writing your own functions can save you tons of time. For those of you who haven't...trust me, this is a big deal.
+
+Your custom functions will have the following 4 attributes:
+
+1. Name: What is the name of your function? You can give it any valid object name. However, be careful not to use names of existing functions or R might get confused.
+
+2. Arguments: What are the inputs to the function? Does it need a vector of numeric data? Or some text? You can specify as many inputs as you want.
+
+3. Actions: What do you want the function to do with the inputs? Create a plot? Calculate a statistic? Run a regression analysis? This is where you'll write all the real R code behind the function.
+
+4. Output: What do you want the code to return when it's finished with the actions? Should it return a scalar statistic? A vector of data? A dataframe?
+
+Here's how your function will look in R. When creating functions, you'll use two new functions (Yes, you use functions to create functions! Very Inception-y), called `function()` and `return()`. You'll put the function inputs as arguments to the `function()` function, and the output(s) as argument(s) to the `return()` function.
+
+
+    # The basic structure of a function
+    NAME <- function(ARGUMENTS) {
+      ACTIONS
+      return(OUTPUT)
+    }
+
+For example, let’s write a function that will simply print some text on the screen:
+
+    simple_function <- function()   { print("Hello!")}
+    simple_function()
+
+Now, I should remind you that functions (most of the time) don’t actually modify and replace the element that was inputted. They will just do their job, and be done with it. If you want to save the result of the operations performed by the function, you’ll have to save it in an object, which we've been doing all along. 
+
+### Creating `my.mean()`
+
+Let's create a custom functino called `my.mean()` that does the exact same thing as the `mean()` function in R. This function will take a vector `x` as an argument, creates a new vector called `output` that is the mean of all the elements of x (by summing all the values in x and dividing by the length of x), then return the `output` object to the user.
+
+
+    # Create the function my.mean()
+    my.mean <- function(x) {   # Single input called x
+      output <- sum(x) / length(x) # Calculate output
+    return(output)  # Return output to the user after running the function
+    }
+
+
+Try running the code above. When you do, nothing obvious happens. However, R has now stored the new function `my.mean()` in the current working directory for later use. To use the function, we can then just call our function like any other function in R. Let's call our new function on some data and make sure that it gives us the same result as `mean()`:
+
+
+    data <- c(3, 1, 6, 4, 2, 8, 4, 2)
+    my.mean(data)
+    mean(data)
+
+
+As you can see, our new function `my.mean()` gave the same result as R's built in `mean()` function! Obviously, this was a bit of a waste of time as we simply recreated a built-in R function. But you get the idea...
+
+### Specifying multiple inputs
+
+You can create functions with as many inputs as you'd like (even 0!). Let's do an example. We'll create a function called `oh.god.how.much.did.i.spend` that helps hungover pirates figure out how much gold they spent after a long night of pirate debauchery. The function will have three inputs: `grogg`: the number of mugs of grogg the pirate drank, `port`: the number of glasses of port the pirate drank, and `crabjuice`: the number of shots of fermented crab juice the pirate drank. Based on this input, the function will calculate how much gold the pirate spent. We'll also assume that a mug of grogg costs 1, a glass of port costs 3, and a shot of fermented crab juice costs 10.
+
+    oh.god.how.much.did.i.spend <- function(grogg,
+                                            port,
+                                            crabjuice) {
+      output <- grogg * 1 + port * 3 + crabjuice * 10
+      return(output)
+    }
+
+
+Now let's test our new function with a few different values for the inputs grogg, port, and crab juice. How much gold did Tamara, who had had 10 mugs of grogg, 3 glasses of wine, and 0 shots of crab juice spend?
+
+
+    oh.god.how.much.did.i.spend(grogg = 10,
+                                port = 3,
+                                crabjuice = 0)
+
+
+Looks like Tamara spent 19 gold last night. Ok, now how about Cosima, who didn't drink any grogg or port, but went a bit nuts on the crab juice:
+
+    oh.god.how.much.did.i.spend(grogg = 0,
+                                port = 0,
+                                crabjuice = 7)
+
+
+Cosima's taste for crab juice set her back 70 gold pieces.
+
+### Including default values for arguments
+
+
+When you create functions with many inputs, you'll probably want to start adding *default* values. Default values are input values which the function will use if the user does not specify their own. Most functions that you've used so far have default values. For example, the `hist()` function will use default values for inputs like `main`, `xlab`, (etc.) if you don't specify them/ Including defaults can save the user a lot of time because it keeps them from having to specify *every* possible input to a function.
+
+To add a default value to a function input, just include `= DEFAULT}`after the input. For example, let's add a default value of 0 to each argument in the `oh.god.how.much.did.i.spend` function. By doing this, R will set any inputs that the user does not specify to 0 -- in other words, it will assume that if you don't tell it how many drinks of a certain type you had, then you must have had 0.
+
+    # Including default values for function arguments
+    oh.god.how.much.did.i.spend <- function(grogg = 0,
+                                            port = 0,
+                                            crabjuice = 0) {
+      output <- grogg * 1 + port * 3 + crabjuice * 10
+      return(output)
+    }
+
+Let's test the new version of our function with data from Hyejeong, who had 5 glasses of port but no grogg or crab juice. Because 0 is the default, we can just ignore these arguments:
+
+    oh.god.how.much.did.i.spend(port = 5)
+
+
+Looks like Hyejeong only spent 15 by sticking with port.
+
+## Logical Tests
+
+Quite frequently, we will want our functions to perform actions if and only if some conditions are met. We could for example want to calculate a square root of a number, only if this number is positive, divide by a number only if it’s different from 0. Or, for example, after sampling the population of a target species at different locations, we could want to compute some statistics if the species is present, and if it’s not, simply return a message saying that the species was not detected at those sites.
+
+If you want to test if 2 values are equal, you will use the double equal sign. If your values are equal, R will return TRUE, and FALSE otherwise. Assuming you want to know if values are different instead, you use the operator “!=”. The operator “!=” will return a mirrored version of the results obtained with the operator “==”. As a matter of fact, you can invert the results of any test this way, simply by preceding the object containing said test with an exclamation point.
+
+Here is a list of the available operators and their meaning:
+
+    a == b   :   Are elements of ‘a’ equal to elements of ‘b’?
+    a != b    :   Are elements of ‘a’ different from elements of ‘b’?
+    a <  b    :   Are elements of ‘a’ less than elements of ‘b’?
+    a >  b    :   Are elements of ‘a’ greater than elements of ‘b’?
+    a <= b   :   Are elements of ‘a’ less than or equal to elements of ‘b’?
+    a >= b   :   Are elements of ‘a’ greater than or equal to elements of ‘b’?
+
+
+Additionally, is it possible to test if elements of a vector or matrix are missing with the function “is.na()”. 
+
+What about if we want to combine conditions? To make a test satisfying conditions A AND B (or more conditions), we use the operator ‘&‘. For a test meeting one condition A OR the condition B (or more conditions), we use the operator ‘|‘. (If you’re looking for it, just look above your ‘enter’ key on most laptops).
+
+Now that we are able to express conditions to R based on tests, we can use that to tell it to do things if a test is positive. It is literally possible to tell to R: “If this condition is met, do this.” 
+
+The instruction “if()” will run the code in the brackets following it if and only if the test that is provided as its input is TRUE.
+
+    if(1==2) { print("Wow, I would have never thought that possible!")  } 
+
+Since 1 is not equal to 2, nothing is printed.
+
+    if(1<2) { print("That makes sense!")  }
+
+Since 1 is lower than 2, R runs the piece of code between the brackets, and prints the sentence.
+
+Even better, we can tell to R: “If this condition is met, do this. Else, do that!” In this case, the bracket closing the section of code describing what to do if the condition will be directly followed by the instruction “else”. This instruction “else” will in turn be followed by a piece of code describing what to do when the “if” condition is not met. Let’s create a function that computes the square root of a number, if it’s positive, and that returns an error message otherwise.
+
+    mysquare= function(x){
+           if (x>=0){
+                res = sqrt(x)      # If x is positive, the result is the square root of x
+                return(res)       # We are warning the function to return as output the object 'res'. This line is not necessary, but it's a good habit to have.
+                }   else {
+                          cat("Nope! Not going to do it!  \n")     # If x is not positive, the result is an “useful” error message
+                          }
+           }
+    mysquare(9)
+    mysquare(-10)
+
+## Using if, then statements in functions
+
+A good function is like a person who knows what to wear for each occasion -- it should put on different things depending on the occasion. In other words, rather than doing (i.e.; wearing) a tuxedo for every event, a good `dress()` function needs to first make sure that the input was (`event == "ball"`) rather than (`event == "jobinterview"`). To selectively evaluate code based on criteria, R uses *if-then* statements. 
+
+To run an if-then statement in R, we use the `if() {}` function. The function has two main elements, a *logical test* in the parentheses, and *conditional code* in curly braces. The code in the curly braces is conditional because it is *only* evaluated if the logical test contained in the parentheses is `TRUE`. If the logical test is `FALSE`, R will completely ignore all of the conditional code.
+
+Let's put some simple `if() {}` statements in a new function called `is.it.true()`. The function will take a single input `x`. If the input x is `TRUE`, the function will print one sentence. If the input x is `FALSE`, it will return a different sentence: 
+
+
+    is.it.true <- function(x) {
+    if(x == TRUE) {print("x was true!")}
+    if(x == FALSE) {print("x was false!")}
+    }
+
+
+Let's try evaluating the function on a few different inputs:
+
+    
+    is.it.true(TRUE)
+    is.it.true(FALSE)
+    is.it.true(10 > 0)
+    is.it.true(10 < 0)
+
+
+
+Using `if()` statements in your functions can allow you to do some really neat things. Let's create a function called `show.me()` that takes a vector of data, and either creates a plot, tells the user some statistics, or tells a joke! The function has two inputs: `x` -- a vector of data, and `what` -- a string value that tells the function what to do with x. We'll set the function up to accept three different values of `what` -- either `"plot"`, which will plot the data, `"stats"`, which will return basic statistics about the vector, or `"tellmeajoke"`, which will return a funny joke!
+
+
+    show.me <- function(x, what) {
+    if(what == "plot") {
+      hist(x, yaxt = "n", ylab = "", border = "white", 
+           col = "skyblue", xlab = "",
+           main = "Ok! I hope you like the plot...")
+    }
+    if(what == "stats") {
+      print(paste("Yarr! The mean of this data be ", 
+                      round(mean(x), 2),
+                  " and the standard deviation be ", 
+                  round(sd(x), 2),
+                  sep = ""))
+    }
+    if(what == "tellmeajoke") {
+      print("I am a pirate, not your joke monkey.")
+    }
+    }
+
+
+Let's try the `show.me()` function with different arguments:
+
+    library(yarrr)
+    show.me(x = pirates$beard.length, 
+            what = "plot")
+
+
+Looks good! Now let's get the same function to tell us some statistics about the data by setting `what = "stats"`:
+
+    show.me(x = pirates$beard.length, 
+            what = "stats")
+  
+
+Phew that was exhausting, I need to hear a funny joke. Let's set `what = "tellmeajoke"`:
+
+    show.me(what = "tellmeajoke")
+
+### Seeing function code
+
+Because R is awesome, you can view the code underlying most functions by just evaluating the name of the function (without any parentheses or arguments). For example, the `yarrr` package contains a function called `transparent()` that converts standard colors into transparent colors. To see the code contained in the function, just evaluate its name:
+
+
+    # Show me the code in the transparent() function
+    transparent
+
+
+Once you know the code underlying a function, you can easily copy it and edit it to your own liking. Or print it and put it above your bed. Totally up to you.
+
+### Using `stop()` to completely stop a function and print an error
+
+By default, all the code in a function will be evaluated when it is executed. However, there may be cases where there's no point in evaluating some code and it's best to stop everything and leave the function altogether. For example, let's say you have a function called `do.stats()` that has a single argument called `mat` which is supposed to be a matrix. If the user accidentally enters a dataframe rather than a matrix, it might be best to stop the function altogether rather than to waste time executing code. To tell a function to stop running, use the `stop()` function.
+
+If R ever executes a `stop()` function, it will automatically quit the function it's currently evaluating, and print an error message. You can define the exact error message you want by including a string as the main argument.
+
+For example, the following function `do.stats` will print an error message if the argument `mat` is not a matrix.
+
+
+    do.stats <- function(mat) {
+    if(is.matrix(mat) == F) {stop("Argument was not a matrix!")}
+    # Only run if argument is a matrix!
+    print(paste("Thanks for giving me a matrix. The matrix has ", nrow(mat), 
+    " rows and ", ncol(mat), 
+    " columns. If you did not give me a matrix, the function would have stopped by now!", 
+    sep = ""))
+    }
+
+
+Let's test it. 
+
+    do.stats(mat = matrix(1:10, nrow = 2, ncol = 5))
+
+
+### Using vectors as arguments
+
+You can use any kind of object as an argument to a function. For example, we could re-create the function `oh.god.how.much.did.i.spend` by having a single vector object as the argument, rather than three separate values. In this version, we'll extract the values of a, b and c using indexing:
+
+
+    oh.god.how.much.did.i.spend <- function(drinks.vec) {
+      grogg <- drinks.vec[1]
+      port <- drinks.vec[2]
+      crabjuice <- drinks.vec[3]
+      output <- grogg * 1 + port * 3 + crabjuice * 10
+      return(output)
+    }
+
+
+To use this function, the pirate will enter the number of drinks she had as a single vector with length three rather than as 3 separate scalars.
+
+    oh.god.how.much.did.i.spend(c(1, 5, 2))
+
+
+### Storing and loading your functions to and from a function file with `source()`
+
+
+As you do more programming in R, you may find yourself writing several function that you'll want to use again and again in many different R scripts. It would be a bit of a pain to have to re-type your functions every time you start a new R session, but thankfully you don't need to do that. Instead, you can store all your functions in one R file and then load that file into each R session.
+
+I recommend that you put all of your custom R functions into a single R script with a name like `customfunctions.R`. Once you've done this, you can load all your functions into any R session by using the `source()` function. The source function takes a file directory as an argument (the location of your custom function file) and then executes the R script into your current session.
+
+When I start a new R session, I load all of my custom functions by running the following code:
+
+    # Evaluate all of the code in my custom function R script
+    source(file = "customfunctions.R")
+
+
+Once I've run this, I have access to all of my functions, I highly recommend that you do the same thing!
+
+### Testing functions
+
+Note: Writing a function (or R code for that matter) can quickly *become confusing*. As lines of code pile up, it becomes more and more *difficult* to catch at a glance what’s happening. It is therefore not only useful but also essential to add *comments* to your code to document what each (at least main) step is doing. In order to do so, R uses the sign ‘#’. Everything on a line that follows a pound sign is not interpreted by R as instructions. And as soon as a line is jumped, text is again interpreted as instructions. For example:
+
+
+When you start writing more complex functions, with several inputs and lots of function code, you'll need to constantly test your function line-by-line to make sure it's working properly. However, because the input values are defined in the input definitions (which you won't execute when testing the function), you can't actually test the code line-by-line until you've defined the input objects in some other way. To do this, I recommend that you include temporary hard-coded values for the inputs at the beginning of the function code.
+
+For example, consider the following function called `remove.outliers`. The goal of this function is to take a vector of data and remove any data points that are outliers. This function takes two inputs `x` and `outlier.def`, where `x` is a vector of numerical data, and `outlier.def` is used to define what an outlier is: if a data point is `outlier.def` standard deviations away from the mean, then it is defined as an outlier and is removed from the data vector.
+
+In the following function definition, I've included two lines where I directly assign the function inputs to certain values (in this case, I set x to be a vector with 100 values of 1, and one outlier value of 999, and `outlier.def` to be 2). Now, if I want to test the function code line by line, I can uncomment these test values, execute the code that assigns those test values to the input objects, then run the function code line by line to make sure the rest of the code works.
+
+
+    remove.outliers <- function(x, outlier.def = 2) {
+    # Test values (only used to test the following code)
+    #  x <- c(rep(1, 100), 999)
+    #  outlier.def <- 2
+      is.outlier <- x > (mean(x) + outlier.def * sd(x)) | 
+                    x < (mean(x) - outlier.def * sd(x))
+      x.nooutliers <- x[is.outlier == FALSE]
+      return(x.nooutliers)
+    }
+
+
+Trust me, when you start building large complex functions, hard-coding these test values will save you many headaches. Just don't forget to comment them out when you are done testing or the function will always use those values!
+
+### Using `...` as a wildcard argument
+
+For some functions that you write, you may want the user to be able to specify inputs to functions within your overall function. For example, if I create a custom function that includes the histogram function `hist()` in R, I might also want the user to be able to specify optional inputs for the plot, like `main`, `xlab, ylab`, etc. However, it would be a real pain in the pirate ass to have to include all possible plotting parameters as inputs to our new function. Thankfully, we can take care of all of this by using the `...` notation as an input to the function. Note that the `...` notation will only pass arguments on to functions that are specifically written to allow for optional inputs. If you look at the help menu for `hist()`, you'll see that it does indeed allow for such option inputs passed on from other functions. The `...` input tells R that the user might add additional inputs that should be used later in the function.
+
+Here's a quick example, let's create a function called `hist.advanced()` that plots a histogram with some optional additional arguments passed on with `...`
+
+
+    hist.advanced <- function(x, add.ci = TRUE, ...) {
+    hist(x, # Main Data
+         ... # Here is where the additional arguments go
+         )
+    if(add.ci == TRUE) {
+      ci <- t.test(x)$conf.int # Get 95% CI
+      segments(ci[1], 0, ci[2], 0, lwd = 5, col = "red")
+      mtext(paste("95% CI of Mean = [", round(ci[1], 2), ",",
+                  round(ci[2], 2), "]"), side = 3, line = 0)
+    }
+    }
+
+
+
+Now, let's test our function with the optional inputs `main`, `xlab`, and `col`. These arguments will be passed down to the `hist()` function within `hist.advanced()`. Here is the result:
+
+
+    hist.advanced(x = rnorm(100), add.ci = TRUE,
+                  main = "Treasure Chests found",
+                  xlab = "Number of Chests",
+                  col = "lightblue")
+
+
+
+ As you can see, R has passed our optional plotting arguments down to the main `hist()` function in the function code.
+ 
+## Assignment 5
+
+
