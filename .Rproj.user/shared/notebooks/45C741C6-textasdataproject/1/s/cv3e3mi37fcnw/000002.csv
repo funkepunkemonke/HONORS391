@@ -1,0 +1,18 @@
+"0","d<-convert2df(""WOSsavedrecs.bib"", format=""bibtex"", dbsource=""wos"")"
+"1","
+Converting your"
+"1"," "
+"1","wos"
+"1"," "
+"1","collection into a bibliographic dataframe
+
+"
+"1","Done!
+
+"
+"1","
+Generating affiliation field tag AU_UN from C1:  "
+"1","Done!
+
+"
+"0","r=biblioAnalysis(d)"

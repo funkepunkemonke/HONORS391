@@ -1,0 +1,114 @@
+"0","# load libraries"
+"0","library(devtools)"
+"2","package ‘devtools’ was built under R version 4.0.3"
+"2","Loading required package: usethis
+"
+"0","library(tidytext)"
+"2","package ‘tidytext’ was built under R version 4.0.3"
+"0","library(plyr)"
+"2","package ‘plyr’ was built under R version 4.0.3"
+"0","library(tidyverse)"
+"2","Registered S3 methods overwritten by 'dbplyr':
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+"
+"2","[30m-- [1mAttaching packages[22m ------------------ tidyverse 1.3.0 --[39m
+"
+"2","[30m[32mv[30m [34mggplot2[30m 3.3.2     [32mv[30m [34mpurrr  [30m 0.3.4
+[32mv[30m [34mtibble [30m 3.0.3     [32mv[30m [34mdplyr  [30m 1.0.2
+[32mv[30m [34mtidyr  [30m 1.1.2     [32mv[30m [34mstringr[30m 1.4.0
+[32mv[30m [34mreadr  [30m 1.3.1     [32mv[30m [34mforcats[30m 0.5.0[39m
+"
+"2","[30m-- [1mConflicts[22m --------------------- tidyverse_conflicts() --
+[31mx[30m [34mdplyr[30m::[32marrange()[30m   masks [34mplyr[30m::arrange()
+[31mx[30m [34mpurrr[30m::[32mcompact()[30m   masks [34mplyr[30m::compact()
+[31mx[30m [34mdplyr[30m::[32mcount()[30m     masks [34mplyr[30m::count()
+[31mx[30m [34mdplyr[30m::[32mfailwith()[30m  masks [34mplyr[30m::failwith()
+[31mx[30m [34mdplyr[30m::[32mfilter()[30m    masks [34mstats[30m::filter()
+[31mx[30m [34mdplyr[30m::[32mid()[30m        masks [34mplyr[30m::id()
+[31mx[30m [34mdplyr[30m::[32mlag()[30m       masks [34mstats[30m::lag()
+[31mx[30m [34mdplyr[30m::[32mmutate()[30m    masks [34mplyr[30m::mutate()
+[31mx[30m [34mdplyr[30m::[32mrename()[30m    masks [34mplyr[30m::rename()
+[31mx[30m [34mdplyr[30m::[32msummarise()[30m masks [34mplyr[30m::summarise()
+[31mx[30m [34mdplyr[30m::[32msummarize()[30m masks [34mplyr[30m::summarize()[39m
+"
+"0","library(quanteda)"
+"2","package ‘quanteda’ was built under R version 4.0.3"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"2","Package version: 2.1.2
+"
+"2","Parallel computing: 2 of 8 threads used.
+"
+"2","See https://quanteda.io for tutorials and examples.
+"
+"2","
+Attaching package: ‘quanteda’
+
+"
+"2","The following object is masked from ‘package:utils’:
+
+    View
+
+"
+"0","library(rvest)"
+"2","package ‘rvest’ was built under R version 4.0.3"
+"2","Loading required package: xml2
+"
+"2","
+Attaching package: ‘rvest’
+
+"
+"2","The following object is masked from ‘package:purrr’:
+
+    pluck
+
+"
+"2","The following object is masked from ‘package:readr’:
+
+    guess_encoding
+
+"
+"0","library(quanteda.textplots)"
+"2","package ‘quanteda.textplots’ was built under R version 4.0.3"
+"2","
+Attaching package: ‘quanteda.textplots’
+
+"
+"2","The following objects are masked from ‘package:quanteda’:
+
+    as.igraph, as.network, textplot_keyness,
+    textplot_network, textplot_wordcloud,
+    textplot_xray
+
+"
+"0","library(cleanNLP)"
+"2","package ‘cleanNLP’ was built under R version 4.0.3"
+"0","library(stringr)"
+"0","library(bibliometrix)"
+"2","package ‘bibliometrix’ was built under R version 4.0.3"
+"2","Registered S3 method overwritten by 'htmlwidgets':
+  method           from         
+  print.htmlwidget tools:rstudio
+"
+"2","Initiating curl with CURL_SSL_BACKEND: openssl
+"
+"2","To cite bibliometrix in publications, please use:
+
+Aria, M. & Cuccurullo, C. (2017) bibliometrix: An R-tool for comprehensive science mapping analysis, Journal of Informetrics, 11(4), pp 959-975, Elsevier.
+                        
+
+http:\\www.bibliometrix.org
+
+                        
+Help us to keep Bibliometrix free to download and use by contributing with a small donation to support our research team (https://bibliometrix.org/donate.html)
+
+                        
+To start with the shiny web-interface, please digit:
+biblioshiny()
+
+"
+"0","cnlp_init_udpipe()"
